@@ -1,0 +1,11 @@
+16:20:56 **** Incremental Build of configuration Debug for project hmi_ecu ****
+make all 
+Building file: ../appl_hmi_ecu.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"appl_hmi_ecu.d" -MT"appl_hmi_ecu.o" -c -o "appl_hmi_ecu.o" "../appl_hmi_ecu.c"
+bash.exe: warning: could not find /tmp, please create!
+make: *** [appl_hmi_ecu.o] Error 3
+"make all" terminated with exit code 2. Build might be incomplete.
+
+16:20:57 Build Failed. 1 errors, 0 warnings. (took 1s.852ms)
+

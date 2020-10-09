@@ -1,0 +1,250 @@
+/***************************************************************************************************
+ * hmi_ecu_appl.c
+ * 		Application Software for System Human-Interface ECU.
+ * 			- Controlling LCD Display
+ * 			- Controlling Keypad 3x4
+ * 			- Controlling Input Buttons
+ * 			- Send needed Data for Control-ECU through UART
+ *
+ *  Created on: Sep 29, 2020
+ *      Author: Ahmed Montasser
+ **************************************************************************************************/
+
+
+
+/* Preprocessor Section ***************************************************************************/
+#include "DIO.h"
+//#include "external_interrupt.h"
+//#include "UART.h"
+#include "LCD.h"
+#include "keypad.h"
+
+
+/* Application S/W #defines */
+#define FOREVER                       0x01
+
+#define ENTER_BUTTON                  PA7
+
+/* Table of defined Communication Messages between the two ECUs */
+#define UART_READY	                  0xFF
+
+//Received Messages from HMI-ECU:-
+#define SETUP_NEW_PASSWORD		      0x01
+#define CHANGE_PASSWORD			      0x02
+#define CHECK_LOGIN_CREDENTIALS	      0x03
+#define OPEN_DOOR				      0x04
+#define CLOSE_DOOR				      0x05
+
+//Replies Sent to HMI-ECU:-
+#define PASSWORD_SAVED			      0x11
+#define USER_AUTHENTICATED            0x12
+#define PASSWORD_NOT_MATCHED	      0x21
+/**************************************************************************************************/
+
+
+
+/* Global Variables *******************************************************************************/
+uint8 tx_password[16];
+/**************************************************************************************************/
+
+
+
+/* Functions Declaration **************************************************************************/
+void DLS_hardwarePeripheralInit(void);
+void DLS_systemWelcome_setupNewPassword(void);
+void DLS_userLogin(void);
+/**************************************************************************************************/
+
+
+
+/* APPL Software: MAIN FUNCTION *******************************************************************/
+int main(void)
+{
+    uint8 pressed_key;
+    uint8 lcd_message_1[28] = "-Select from below options:";
+    uint8 lcd_message_2[33] = " [*]Change Passwd [#]User Authen";
+    uint8 lcd_message_3[9]  = "Success!";
+    uint8 lcd_message_4[6]  = "Fail!";
+
+    /* Hardware Peripherals init Functions */
+    DLS_hardwarePeripheralInit();
+
+    /* System Welcome and 1st time Password Setup Function */
+    do
+    {
+        DLS_systemWelcome_setupNewPassword();
+
+    }while(FALSE);
+    
+
+    while(FOREVER)
+    {
+        pressed_key = _KEYPAD_getCurrentPressedKey();
+
+        switch( pressed_key )
+        {
+        case '#':   /*Key for User Login*/
+                DLS_userLogin();
+            break;
+
+        case '*':   /*Key for Change Password*/
+
+            break;
+            
+        default:
+            /*Do Nothing*/
+            break;
+        }
+
+    }
+    
+    return 0;
+
+}
+
+/* APPL Software: MAIN FUNCTION *******************************************************************/
+void  DLS_hardwarePeripheralInit(void)
+{
+    /* Initialize LCD Hardware */
+    _LCD_init();
+
+    /* Initialize ENTER Button: Digital Output Pin */
+    __DIO_setPinDirection(DDR_D, ENTER_BUTTON, INPUT_PIN);
+    __DIO_enableInternalPullupResistance(PORT_D, ENTER_BUTTON);
+
+    /**/
+}
+/**************************************************************************************************/
+
+/* APPL Software: MAIN FUNCTION *******************************************************************/
+void DLS_systemWelcome_setupNewPassword(void)
+{
+    uint8 passwd_length = 0;
+    uint8 lcd_message_1[17] = "-Welcome to DLS-";
+    uint8 lcd_message_2[15] = "Enter Passwd: ";
+    uint8 lcd_message_3[18] = "Re-enter Passwd: ";
+    uint8 lcd_message_4[8]  = "SUBMIT?";
+    uint8 lcd_message_5[17] = "Saving Passwd...";
+
+
+    /* Display the Welcome Message */
+    _LCD_displayString_atCursor(lcd_message_1, 0, 8);
+    APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+    APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+
+
+    /* Fill the Password Entries 1st time */
+    _LCD_adjustCursorPosition(1,0);
+    _LCD_displayString(lcd_message_2);
+    while(FOREVER)
+    {
+        /* Get pressed key value and save it in tx_password array */
+        tx_password[passwd_length] = _KEYPAD_getCurrentPressedKey();
+
+        /* if pressed key not a number; do nothing and overwrite this value */
+        if( tx_password[passwd_length]>='0' && tx_password[passwd_length]>='9' )
+        {
+            _LCD_displayCharacter(tx_password[passwd_length]);
+            passwd_length++;
+
+            if( passwd_length == 5 )
+            {
+                _LCD_displayString_atCursor(lcd_message_4, 1, 25);
+                while( __DIO_readInputPinValue(PIN_A, PA7)==HIGH );
+                break;
+            }
+        }
+
+        /* Delay; in order not to receive multiple values from one press */
+        APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_HALF_SEC_DELAY;
+    }
+
+    /* Fill the Password Entries 2nd time */
+    _LCD_adjustCursorPosition(1,0);
+    _LCD_displayString(lcd_message_3);
+    while(FOREVER)
+    {
+        /* Get pressed key value and save it in tx_password array */
+        tx_password[passwd_length] = _KEYPAD_getCurrentPressedKey();
+
+        /* if pressed key not a number; do nothing and overwrite this value */
+        if( tx_password[passwd_length]>='0' && tx_password[passwd_length]>='9' )
+        {
+            _LCD_displayCharacter(tx_password[passwd_length]);
+            passwd_length++;
+
+            if( passwd_length == 10 )
+            {
+                tx_password[10] = '\0';
+                _LCD_displayString_atCursor(lcd_message_4, 1, 25);
+                while( __DIO_readInputPinValue(PIN_A, PA7) == HIGH );
+                break;
+            }
+        }
+
+        /* Delay; in order not to receive multiple values from one press */
+        APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_HALF_SEC_DELAY;
+    }
+
+    /* Output Saving Password and return to Main Function */
+    _LCD_adjustCursorPosition(1,0);
+    _LCD_displayString(lcd_message_5);
+
+}
+/**************************************************************************************************/
+
+/* APPL Software: MAIN FUNCTION *******************************************************************/
+void DLS_userLogin(void)
+{
+    uint8 passwd_length = 0;
+    uint8 lcd_message_1[13] = "User Login:-";
+    uint8 lcd_message_2[15] = "Enter Passwd: ";
+    uint8 lcd_message_3[8]  = "SUBMIT?";
+    uint8 lcd_message_4[9]  = "Login...";
+
+
+    /* Display the Welcome Message */
+    _LCD_displayString(lcd_message_1);
+    APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+    APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+
+
+    /* Fill the Password Entries */
+    _LCD_adjustCursorPosition(1,0);
+    _LCD_displayString(lcd_message_2);
+    while(FOREVER)
+    {
+        /* Get pressed key value and save it in tx_password array */
+        tx_password[passwd_length] = _KEYPAD_getCurrentPressedKey();
+
+        /* if pressed key not a number; do nothing and overwrite this value */
+        if( tx_password[passwd_length]>='0' && tx_password[passwd_length]>='9' )
+        {
+            _LCD_displayCharacter(tx_password[passwd_length]);
+            passwd_length++;
+
+            if( passwd_length == 5 )
+            {
+                tx_password[10] = '\0';
+                _LCD_displayString_atCursor(lcd_message_3, 1, 25);
+                while( __DIO_readInputPinValue(PIN_A, PA7) == HIGH );
+                break;
+            }
+        }
+
+        /* Delay; in order not to receive multiple values from one press */
+        APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_HALF_SEC_DELAY;
+    }
+
+    /* Output Saving Password and return to Main Function */
+    _LCD_adjustCursorPosition(1,0);
+    _LCD_displayString(lcd_message_4);
+
+}
+/**************************************************************************************************/
+
+/* APPL Software: MAIN FUNCTION *******************************************************************/
+/**************************************************************************************************/
+
+/* APPL Software: MAIN FUNCTION *******************************************************************/
+/**************************************************************************************************/

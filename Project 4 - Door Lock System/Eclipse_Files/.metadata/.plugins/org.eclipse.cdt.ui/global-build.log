@@ -1,0 +1,31 @@
+00:59:44 **** Incremental Build of configuration Debug for project HMI_ECU_PROJECT ****
+make all 
+Building file: ../hmi_ecu_appl.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"hmi_ecu_appl.d" -MT"hmi_ecu_appl.o" -c -o "hmi_ecu_appl.o" "../hmi_ecu_appl.c"
+Finished building: ../hmi_ecu_appl.c
+ 
+Building target: HMI_ECU_PROJECT.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,HMI_ECU_PROJECT.map -mmcu=atmega16 -o "HMI_ECU_PROJECT.elf"  ./DIO.o ./LCD.o ./UART.o ./external_interrupt.o ./hmi_ecu_appl.o ./keypad.o ./main_old.o   
+Finished building target: HMI_ECU_PROJECT.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S HMI_ECU_PROJECT.elf  >"HMI_ECU_PROJECT.lss"
+Finished building: HMI_ECU_PROJECT.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega16 HMI_ECU_PROJECT.elf
+AVR Memory Usage
+----------------
+Device: atmega16
+
+Program:   12348 bytes (75.4% Full)
+(.text + .data + .bootloader)
+
+Data:        275 bytes (26.9% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

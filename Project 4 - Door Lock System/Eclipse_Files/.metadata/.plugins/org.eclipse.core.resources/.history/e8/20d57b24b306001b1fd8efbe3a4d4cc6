@@ -1,0 +1,302 @@
+/***************************************************************************************************
+ * cont_ecu_appl.c
+ * 		Application Software for System Control ECU (F_CPU = 8MHz).
+ * 			- Saving and Checking Password Correctness for User Password over EEPROM.
+ * 			- Open/Close Door through DC Motor.
+ * 			- Initiate Alarm in case invalid Credentials Enter several times.
+ * 			- Receive needed Data for Human Interface-ECU through UART
+ *
+ *  Created on: Sep 29, 2020
+ *      Author: Ahmed Montasser
+ **************************************************************************************************/
+
+
+
+/* Preprocessor Section ***************************************************************************/
+#include "DIO.h"
+#include "timer.h"
+#include "UART.h"
+#include "ext_eeprom.h"
+#include "dc_motor.h"
+#include "alarm.h"
+
+/* Application S/W #defines */
+#define FOREVER                       0x01
+/*TESTING*/#define FAILED_LED					  PD3/*TESTING*/
+/*TESTING*/#define SUCCESS_LED					  PD2/*TESTING*/
+
+/* Timer 1 #defines */
+#define _1_SECOND                     8000
+#define _2_SECONDS                    16000
+#define _4_SECONDS                    32000
+#define MOTOR_ISR_CODE                0x01
+#define ALARM_ISR_CODE                0x02
+
+/* TWI Communication #defines */
+#define TWI_ECU_MASTER_ADDR           0x01
+#define USR_PASSWD_EEPROM_MEM_LOC     0x0F
+
+/* Table of defined Communication Messages between the two ECUs */
+#define UART_READY	                  0xFF
+
+//Received Messages from HMI-ECU:-
+#define SETUP_NEW_PASSWORD		      0x01
+#define CHANGE_PASSWORD			      0x02
+#define CHECK_LOGIN_CREDENTIALS	      0x03
+#define OPEN_DOOR				      0x04
+#define CLOSE_DOOR				      0x05
+
+//Replies Sent to HMI-ECU:-
+#define PASSWORD_SAVED			      0x11
+#define USER_AUTHENTICATED            0x12
+#define PASSWORD_NOT_MATCHED	      0x21
+/**************************************************************************************************/
+
+
+
+/* Global Variables *******************************************************************************/
+/*UART Received Password from HMI-ECU Variable*/
+uint8 rx_password[16];
+/*Timer 1 Specfic Global variables used in ISR and Main APPL*/
+uint8 alarm_counter = 0;
+uint8 code_blocking_flag = FALSE;
+uint8 executeISR;
+/*TIMER1 Configuration Parameters*/
+configType_TIMER timer1_configs = {TIMER1, TIMER_F_CPU_1024, 0, OCx_DISABLED};
+/**************************************************************************************************/
+
+
+
+/* Functions Declaration **************************************************************************/
+void DLS_hardwarePeripheralInit(void);
+uint8 DLS_setupNewPassword(void);
+uint8 DLS_checkLoginCredentials(void);
+void DLS_TIMER1_ISR_callBackFunction(void);
+/**************************************************************************************************/
+
+
+
+/* APPL Software **********************************************************************************/
+
+/*------APPL Main Function------*/
+int main(void)
+{
+    uint8 task_status, control_task;
+
+    /* Hardware Peripherals init Functions */
+	DLS_hardwarePeripheralInit();
+
+
+    while(FOREVER)
+    {
+        __UART_sendByte(UART_READY);
+        control_task = __UART_receiveByte();
+
+        switch(control_task)
+        {
+        /*----------------------------------------------------------------*/
+        case SETUP_NEW_PASSWORD:
+            
+            __UART_sendByte(UART_READY);
+            __UART_receiveString(rx_password);
+            
+            task_status = DLS_setupNewPassword();
+            __UART_sendByte(task_status);
+
+            break;
+        /*----------------------------------------------------------------*/
+        case CHECK_LOGIN_CREDENTIALS:
+
+            __UART_sendByte(UART_READY);
+            __UART_receiveString(rx_password);
+
+            task_status = DLS_checkLoginCredentials();
+            __UART_sendByte(task_status);
+
+            break;
+        /*----------------------------------------------------------------*/
+        case OPEN_DOOR:
+
+            _MOTORDC_rotate(CW);
+            executeISR = MOTOR_ISR_CODE;
+            timer1_configs.compare_value = _4_SECONDS;
+			__TIMER_CTC_startTimer(&timer1_configs);
+
+            break;
+        /*----------------------------------------------------------------*/
+        case CLOSE_DOOR:
+
+			_MOTORDC_rotate(CCW);
+            executeISR = MOTOR_ISR_CODE;
+            timer1_configs.compare_value = _4_SECONDS;
+			__TIMER_CTC_startTimer(&timer1_configs);
+
+            break;
+        /*----------------------------------------------------------------*/
+        default:
+            /* Do Nothing */
+            break;
+        /*----------------------------------------------------------------*/
+        }
+
+    }
+    return 0;
+
+}
+/*-------------------------------------------------------------------------*/
+
+
+/*----APPL Functions Definitions----*/
+/*-------------------------------------------------------------------------*/
+void DLS_hardwarePeripheralInit(void)
+{
+    /*UART Configuration Parameters*/
+	UART_config uart_configs = {9600, _8_BIT_DATA, ONE_STOP_BIT, DISABLE_PARITY};
+
+    /* Initialize the Motor Control Pins */
+	_MOTORDC_init();
+
+    /* Initialize the Alarm Control Pin */
+    _ALARM_init();
+
+    /* Initialize TIMER1 ISR CallBack Function */
+	__TIMER_CTC_setISRCallBackFuncPointer(TIMER1, DLS_TIMER1_ISR_callBackFunction);
+
+    /* Initialize EEPROM */
+	_EXT_EEPROM_init(TWI_ECU_MASTER_ADDR);
+
+    /* Initialize UART Module */
+	__UART_init(&uart_configs);
+
+	/*TESTING*/__DIO_setPinDirection(DDR_D, SUCCESS_LED, OUTPUT_PIN);/*TESTING*/
+	/*TESTING*/__DIO_setPinDirection(DDR_D, FAILED_LED, OUTPUT_PIN);/*TESTING*/
+	/*TESTING*/__DIO_writeOutputPinValue(PORT_D, SUCCESS_LED, LOW);/*TESTING*/
+	/*TESTING*/__DIO_writeOutputPinValue(PORT_D, FAILED_LED, LOW);/*TESTING*/
+
+}
+/*-------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------*/
+uint8 DLS_setupNewPassword(void)
+{
+    
+    uint8 i;
+
+    /* Check the Entered Passwords are identical */
+    for( i=0 ; i<=4 ; i++ )
+    {
+        /* if not identical, break func; return PASSWORD_NOT_MATCHED */
+        if( rx_password[i] != rx_password[5+i] )
+        {
+        	/*TESTING*/__DIO_writeOutputPinValue(PORT_D, FAILED_LED, HIGH);/*TESTING*/
+        	APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+        	APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+            /*TESTING*/__DIO_writeOutputPinValue(PORT_D, FAILED_LED, LOW);/*TESTING*/
+
+            return PASSWORD_NOT_MATCHED;
+        }
+    }
+    
+    /* Save the password in EEPROM */
+    for( i=0 ; i<=4 ; i++ )
+    {
+        _EXT_EEPROM_writeByte( USR_PASSWD_EEPROM_MEM_LOC , rx_password[i] );
+        APPROX_HALF_SEC_DELAY;
+    }
+
+    /*TESTING*/__DIO_writeOutputPinValue(PORT_D, SUCCESS_LED, HIGH);/*TESTING*/
+    APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+    APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+    /*TESTING*/__DIO_writeOutputPinValue(PORT_D, SUCCESS_LED, LOW);/*TESTING*/
+
+    return PASSWORD_SAVED;
+
+}
+/*-------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------*/
+uint8 DLS_checkLoginCredentials(void)
+{
+
+    static uint8 wrongTrialsAlarm_counter = 0;
+    uint8 i, saved_password[5];
+
+    /* Fetch saved password from EEPROM */
+    for( i=0 ; i<=4 ; i++ )
+    {
+        _EXT_EEPROM_readByte( USR_PASSWD_EEPROM_MEM_LOC , saved_password+i );
+        APPROX_HALF_SEC_DELAY;
+    }
+
+    /* Check entered credentials correctness */
+    for( i=0 ; i<=4 ; i++ )
+    {
+        /* if not identical, break func; return PASSWORD_NOT_MATCHED */
+    	if( rx_password[i] != saved_password[i] )
+    	{
+    		/*TESTING*/__DIO_writeOutputPinValue(PORT_D, FAILED_LED, HIGH);/*TESTING*/
+    		APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+    		APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+    		/*TESTING*/__DIO_writeOutputPinValue(PORT_D, FAILED_LED, LOW);/*TESTING*/
+
+            wrongTrialsAlarm_counter++;
+            if( wrongTrialsAlarm_counter == 2)
+            {
+                alarm_counter = 0;
+                executeISR = ALARM_ISR_CODE;
+                timer1_configs.compare_value = _1_SECOND;
+                __TIMER_CTC_startTimer(&timer1_configs);
+                
+                code_blocking_flag = TRUE;
+                while(code_blocking_flag);
+            }
+
+    		return PASSWORD_NOT_MATCHED;
+    	}
+    }
+
+    /*TESTING*/__DIO_writeOutputPinValue(PORT_D, SUCCESS_LED, HIGH);/*TESTING*/
+    APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+    APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+    /*TESTING*/__DIO_writeOutputPinValue(PORT_D, SUCCESS_LED, LOW);/*TESTING*/
+
+    wrongTrialsAlarm_counter = 0;
+
+    return USER_AUTHENTICATED;
+
+}
+/*-------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------*/
+void DLS_TIMER1_ISR_callBackFunction(void)
+{
+    
+    if( executeISR == MOTOR_ISR_CODE )
+    {
+        __TIMER_CTC_stopTimer(TIMER1);
+        _MOTORDC_rotate(OFF);
+    }
+    else if( executeISR == ALARM_ISR_CODE )
+    {
+        alarm_counter++;
+
+        if( alarm_counter == 8)
+        {
+            __TIMER_CTC_stopTimer(TIMER1);
+            code_blocking_flag = FALSE;
+            return;
+        }
+
+        if( alarm_counter%2 == 0)
+        {
+            _ALARM_state(ON);
+        }
+        else
+        {
+            _ALARM_state(OFF);
+        }
+    }
+    
+}
+/*-------------------------------------------------------------------------*/
+/**************************************************************************************************/

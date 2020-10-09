@@ -1,0 +1,105 @@
+16:21:45 **** Incremental Build of configuration Debug for project hmi_ecu_old ****
+make all 
+Building file: ../DIO.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"DIO.d" -MT"DIO.o" -c -o "DIO.o" "../DIO.c"
+Finished building: ../DIO.c
+ 
+Building file: ../LCD.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"LCD.d" -MT"LCD.o" -c -o "LCD.o" "../LCD.c"
+Finished building: ../LCD.c
+ 
+Building file: ../UART.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"UART.d" -MT"UART.o" -c -o "UART.o" "../UART.c"
+Finished building: ../UART.c
+ 
+Building file: ../appl_hmi_ecu.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"appl_hmi_ecu.d" -MT"appl_hmi_ecu.o" -c -o "appl_hmi_ecu.o" "../appl_hmi_ecu.c"
+../appl_hmi_ecu.c:20:1: warning: "F_CPU" redefined
+<command-line>: warning: this is the location of the previous definition
+../appl_hmi_ecu.c: In function 'main':
+../appl_hmi_ecu.c:83: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:95: warning: comparison between pointer and integer
+../appl_hmi_ecu.c:96: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:103: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:105: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:115: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:127: warning: comparison between pointer and integer
+../appl_hmi_ecu.c:128: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:136: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:148: warning: comparison between pointer and integer
+../appl_hmi_ecu.c:149: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:150: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c: In function 'systemUserAuthenticate':
+../appl_hmi_ecu.c:168: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:183: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:184: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c: In function 'systemPasswordSetup':
+../appl_hmi_ecu.c:204: warning: pointer targets in passing argument 1 of '_LCD_displayString' differ in signedness
+../appl_hmi_ecu.c:212: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:225: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:226: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:241: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:254: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:255: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:263: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:277: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c:278: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c: In function 'externalInterrupt1_OpenButton__ISRFunc':
+../appl_hmi_ecu.c:303: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+../appl_hmi_ecu.c: In function 'externalInterrupt0_CloseButton_ISRFunc':
+../appl_hmi_ecu.c:315: warning: pointer targets in passing argument 1 of '_LCD_displayString_atCursor' differ in signedness
+Finished building: ../appl_hmi_ecu.c
+ 
+Building file: ../external_interrupt.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"external_interrupt.d" -MT"external_interrupt.o" -c -o "external_interrupt.o" "../external_interrupt.c"
+../external_interrupt.c: In function '__INT0_setISRCallBackFuncPointer':
+../external_interrupt.c:47: warning: function return types not compatible due to 'volatile'
+../external_interrupt.c: In function '__INT1_setISRCallBackFuncPointer':
+../external_interrupt.c:108: warning: function return types not compatible due to 'volatile'
+Finished building: ../external_interrupt.c
+ 
+Building file: ../keypad.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"keypad.d" -MT"keypad.o" -c -o "keypad.o" "../keypad.c"
+Finished building: ../keypad.c
+ 
+Building file: ../tim.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"tim.d" -MT"tim.o" -c -o "tim.o" "../tim.c"
+../tim.c: In function '__TIMER_CTC_setISRCallBackFuncPointer':
+../tim.c:56: warning: function return types not compatible due to 'volatile'
+../tim.c:60: warning: function return types not compatible due to 'volatile'
+Finished building: ../tim.c
+ 
+Building target: hmi_ecu_old.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,hmi_ecu_old.map -mmcu=atmega16 -o "hmi_ecu_old.elf"  ./DIO.o ./LCD.o ./UART.o ./appl_hmi_ecu.o ./external_interrupt.o ./keypad.o ./tim.o   
+Finished building target: hmi_ecu_old.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S hmi_ecu_old.elf  >"hmi_ecu_old.lss"
+Finished building: hmi_ecu_old.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega16 hmi_ecu_old.elf
+AVR Memory Usage
+----------------
+Device: atmega16
+
+Program:    7704 bytes (47.0% Full)
+(.text + .data + .bootloader)
+
+Data:        353 bytes (34.5% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+16:21:49 Build Finished. 0 errors, 32 warnings. (took 4s.202ms)
+
