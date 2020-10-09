@@ -1,0 +1,39 @@
+/*
+ * motor_dc.h
+ *
+ *  Created on: Sep 23, 2020
+ *      Author: montasse
+ */
+
+
+#ifndef MOTOR_DC_
+#define MOTOR_DC_
+
+/** Include Directives *******************************************************/
+#include "PWM.h"
+#include "DIO.h"
+/** Macros Definitions *******************************************************/
+#define FORWARD_DIR		0
+#define BACKWARD_DIR	1
+/** Static Configurations >>Edited By Developer<< ****************************/
+#define MOTOR_IN1		PB5
+#define MOTOR_IN2		PB4
+#define MOTOR_PORT_DDR	DDR_B
+#define MOTOR_PORT_PORT	PORT_B
+/*****************************************************************************/
+
+
+/** Variable Declaration *****************************************************/
+typedef struct
+{
+	uint8 speed;
+	uint8  direction;
+}MOTOR_config;
+/*****************************************************************************/
+
+
+/** Function Declaration *****************************************************/
+void _DCMOTOR_motorOn(const MOTOR_config *m_config_ptr);
+void _DCMOTOR_motorOff(void);
+/*****************************************************************************/
+#endif	/*MOTOR_DC_*/

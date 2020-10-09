@@ -1,0 +1,34 @@
+17:40:38 **** Incremental Build of configuration Debug for project Motor_ControlSystem ****
+make all 
+Building file: ../.metadata/.plugins/org.eclipse.cdt.make.core/specs.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF".metadata/.plugins/org.eclipse.cdt.make.core/specs.d" -MT".metadata/.plugins/org.eclipse.cdt.make.core/specs.o" -c -o ".metadata/.plugins/org.eclipse.cdt.make.core/specs.o" "../.metadata/.plugins/org.eclipse.cdt.make.core/specs.c"
+Finished building: ../.metadata/.plugins/org.eclipse.cdt.make.core/specs.c
+ 
+Building target: Motor_ControlSystem.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,Motor_ControlSystem.map -mmcu=atmega16 -o "Motor_ControlSystem.elf"  ./.metadata/.plugins/org.eclipse.cdt.make.core/specs.o  ./ADC.o ./DIO.o ./LCD.o ./PWM.o ./appl.o ./external_interrupt.o ./motor_dc.o   
+Finished building target: Motor_ControlSystem.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S Motor_ControlSystem.elf  >"Motor_ControlSystem.lss"
+Finished building: Motor_ControlSystem.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega16 Motor_ControlSystem.elf
+AVR Memory Usage
+----------------
+Device: atmega16
+
+Program:    6976 bytes (42.6% Full)
+(.text + .data + .bootloader)
+
+Data:        311 bytes (30.4% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+17:40:46 Build Finished. 0 errors, 0 warnings. (took 7s.695ms)
+

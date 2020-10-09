@@ -1,0 +1,59 @@
+/*
+ * appl.c
+ *		Motor Control System:-
+ *			- Motor Direction Control over Push Button; INT2 pin.
+ *			- Motor Speed Control over Potentiometer; ADC7 pin.
+ *			- Speed Display over LCD  connected over PORTD and PORTC.
+ *			- Motor Connection through Driver:-
+ *				- Input Pins (PB5 and PB4 pins).
+ *				- PWM Input 'Speed control' (OC0 pin).
+ *
+ *  Created on: Sep 23, 2020
+ *      Author: Ahmed Montasser
+ */
+#include "LCD.h"
+#include "motor_dc.h"
+#include ""
+
+void directionButton_ISRcallBackFunction(void);
+
+volatile MOTOR_config motor_config = {0, FORWARD_DIR};
+
+int main(void)
+{
+	uint8 lcd_string[15] = "Motor Speed : ";
+
+
+	_LCD_init();
+	_LCD_displayString(lcd_string);
+
+	__INT2_setISRCallBackFuncPointer(motorDirectionButton_ISRcallBackFunc);
+
+	while(TRUE)
+	{
+		motor_config.speed = 50;
+		_LCD_displayIntegerVariable(motor_config.speed);
+		_DCMOTOR_motorOn(&motor_config);
+		APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+
+		motor_config.speed = 100;
+		_LCD_displayIntegerVariable(motor_config.speed);
+		_DCMOTOR_motorOn(&motor_config);
+		APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;APPROX_1SEC_DELAY;
+	}
+	return 0;
+}
+
+void motorDirectionButton_ISRcallBackFunc(void)
+{
+	if(motor_config.direction == BACKWARD_DIR)
+	{
+		motor_config.direction = FORWARD_DIR;
+	}
+	else
+	{
+		motor_config.direction = BACKWARD_DIR;
+	}
+
+}
+

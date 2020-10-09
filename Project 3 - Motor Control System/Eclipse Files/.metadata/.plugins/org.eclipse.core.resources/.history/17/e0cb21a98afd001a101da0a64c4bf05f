@@ -1,0 +1,116 @@
+/***********************************************************************************************
+ * PWM.h
+ * 
+ *		**PWM - Driver**
+ *      This Module is Designed to activate the PWMs.
+ *          - PWM0 > 8 bits.
+ *          - PWM1 > 16 bits.
+ *          - PWM2 > 8 bits.
+ *      Designed for AVR ATmega16 Microcontroller
+ *
+ *  Created on: Sep 6, 2020
+ *      Author: Ahmed Montasser
+ ***********************************************************************************************
+ * > When Using this Module :-
+ * -----------------------------
+ * 1. Define the needed interrupt to allow its code, otherwise it will be disbaled:
+ *      #define _PWM0
+ *      #define _PWM1
+ *      #define _PWM2
+ * 
+ * 
+ **********************************************************************************************/
+
+#ifndef PWM_H_
+#define PWM_H_
+
+/** Configuration Parameters ***************************************************/
+/*** Defined Symbolic Constants ******/
+#define PWM_MODE                0
+
+#define INVERTING_MODE              3
+#define NON_INVERTING_MODE          2
+
+/*** Static Configurations ******/     /** Edited By Developer **/
+#define _PWM0                        /*Comment it if not needed*/
+#define _PWM1                      /*Comment it if not needed*/
+//#define _PWM2                      /*Comment it if not needed*/
+/*****************************************************************************/
+
+/** Used Directories *********************************************************/
+#include "datatypes.h"
+#include "macros.h"
+#include "registers.h"
+/*****************************************************************************/
+
+/** Variables Declaration ****************************************************/
+typedef enum
+{
+    PWM_NO_CLK, PWM_F_CPU, PWM_F_CPU_8, PWM_F_CPU_64, PWM_F_CPU_256, PWM_F_CPU_1024
+}p_clock;
+
+#ifdef _PWM0
+typedef struct
+{
+	p_clock PWM_clock;              //values: NO_CLK,F_CPU,F_CPU_8,F_CPU_64,F_CPU_256,F_CPU_1024
+	uint8 duty_cycle;               //values: from 0 ... 255
+    uint8 PWM_mode;                 //values: INVERTING_MODE / NON_INVERTING_MODE
+}configType_PWM0;
+#endif
+
+#ifdef _PWM1
+typedef struct
+{
+	p_clock PWM_clock;              //values: NO_CLK,F_CPU,F_CPU_8,F_CPU_64,F_CPU_256,F_CPU_1024
+    uint16  top_prescale_value;     //values: from 0 ... 65535 (used with prescaler to adjust the Timer frequency)
+	uint16  duty_cycle;             //values: from 0 ... 65535
+    uint8   PWM_mode;               //values: INVERTING_MODE / NON_INVERTING_MODE
+}configType_PWM1;
+#endif
+/*****************************************************************************/
+
+/** Function Prototypes ******************************************************/
+#ifdef _PWM0
+
+    /*** Description:-
+     * Used to Start the PWM with the desired Configuration
+     * Func Args, struct Members: PWM_clock / compare_value / OC0_mode */
+    void __PWM0_startModule(const configType_PWM0 *pwm0_configPointer);
+            
+    /*** Description:-
+     * Used to Disable the PWM */
+    void __PWM0_stopModule(void);
+
+#endif
+
+#ifdef _PWM1
+
+    /*** Description:-
+     * Used to Start the PWM with the desired Configuration
+     * Func Args, struct Members: PWM_clock / compare_value / OC1A_mode */
+    void __PWM1_startModule(const configType_PWM1 *pwm1_configPointer);
+
+    /*** Description:-
+     * Used to Disable the PWM */
+    void __PWM1_stopModule(void);
+
+#endif
+/**********************************************************************************************/ 
+/* - Notes:-
+ * -----------
+ ** For PWM 0 [8 Bits: 0...255] - CPU Clock: 1MHz:
+ *  - No   Prescaler : (PWM Freq:   1MHz)
+ *  - 8    Prescaler : (PWM Freq: 125KHz)
+ *  - 64   Prescaler : (PWM Freq:  15KHz)
+ *  - 256  Prescaler : (PWM Freq: 3.9KHz)
+ *  - 1024 Prescaler : (PWM Freq:  976Hz)
+ **********************************************************************************************
+ ** For PWM 1 [16 Bits: 0...65535] :
+ *  - For Servo Motors (50 Hz)
+ *      -> F_CPU            : 1MHz
+ *      -> TOP VALUE (ICR1) : 2499
+ *      -> Prescaler        : 8
+ *      -> Compare Value    : 
+ *          - 
+ **********************************************************************************************/
+#endif /* PWM_H_ */

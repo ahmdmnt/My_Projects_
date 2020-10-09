@@ -1,0 +1,28 @@
+/*
+ * motor_dc.h
+ *
+ *  Created on: Sep 23, 2020
+ *      Author: montasse
+ */
+
+
+#ifndef MOTOR_DC_
+#define MOTOR_DC_
+
+
+
+
+/**Variable Decalartion ******************************************************/
+typedef struct
+{
+	uint8 speed;
+	uint8  direction;
+}MOTOR_config;
+/*****************************************************************************/
+
+
+
+
+
+
+#endif	/*MOTOR_DC_*/

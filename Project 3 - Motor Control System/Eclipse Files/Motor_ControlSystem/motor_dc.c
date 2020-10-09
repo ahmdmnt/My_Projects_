@@ -1,0 +1,58 @@
+/*
+ * motor_dc.c
+ *
+ *  Created on: Sep 23, 2020
+ *      Author: montasse
+ */
+
+/** INclude Directives *******************************************************/
+#include "motor_dc.h"
+/*****************************************************************************/
+
+/** Function Definition ******************************************************/
+/* Description:-
+ * Function used to start operating the MOTOR.
+ */
+void _DCMOTOR_motorOn(volatile const MOTOR_config *m_config_ptr)
+{
+	/*Speed Conversion to match exact PWM duty cycle value*/
+	 uint8 duty_cycle_value = ((float32)m_config_ptr->speed)/100*254;
+
+	/*Define the PWM config enable variable*/
+	configType_PWM0 pwm0_config = {PWM_F_CPU_1024, duty_cycle_value, NON_INVERTING_MODE};
+
+	/*Set IN1(PD7) and IN2(PD6) as Output Pins and init value LOW*/
+	__DIO_setPinDirection(MOTOR_PORT_DDR, MOTOR_IN1, OUTPUT_PIN);
+	__DIO_setPinDirection(MOTOR_PORT_DDR, MOTOR_IN2, OUTPUT_PIN);
+	__DIO_writeOutputPinValue(MOTOR_PORT_PORT, MOTOR_IN1, LOW);
+	__DIO_writeOutputPinValue(MOTOR_PORT_PORT, MOTOR_IN2, LOW);
+
+	/*Adjust Motor Speed by enabling PWM*/
+	__PWM0_startModule(&pwm0_config);
+
+	/*Adjust Motor Direction*/
+	switch( m_config_ptr->direction )
+	{
+	case FORWARD_DIR:
+		__DIO_writeOutputPinValue(MOTOR_PORT_PORT, MOTOR_IN1, HIGH);
+		__DIO_writeOutputPinValue(MOTOR_PORT_PORT, MOTOR_IN2, LOW);
+		break;
+	case BACKWARD_DIR:
+		__DIO_writeOutputPinValue(MOTOR_PORT_PORT, MOTOR_IN1, LOW);
+		__DIO_writeOutputPinValue(MOTOR_PORT_PORT, MOTOR_IN2, HIGH);
+		break;
+	default:break;
+	}
+}
+
+/* Description:-
+ * Function used to stop operating the MOTOR.
+ */
+void _DCMOTOR_motorOff(void)
+{
+	/*Stop PWM Signal as well as IN pins*/
+	__PWM0_stopModule();
+	__DIO_writeOutputPinValue(MOTOR_PORT_PORT, MOTOR_IN1, LOW);
+	__DIO_writeOutputPinValue(MOTOR_PORT_PORT, MOTOR_IN2, LOW);
+}
+/*****************************************************************************/

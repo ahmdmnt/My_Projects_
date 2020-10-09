@@ -1,0 +1,135 @@
+/**********************************************************************************************
+ * LCD.c
+ * 
+ *		**LCD - Driver**
+ *      Designed for AVR ATmega16 Microcontroller
+ *
+ *  Created on: Sep 6, 2020
+ *      Author: Ahmed Montasser
+ ***********************************************************************************************/
+
+
+/**** Include Driver Header file ****/
+#include "LCD.h"
+
+
+/**** Variable Definitions  ****/
+static uint8 cycle;
+
+/**** Function Prototypes ****/
+void _LCD_init(void)
+{
+	/* Set Direction for Rs and RW and En Pins as Ouput */
+	__DIO_setPinDirection(LCD_CTRL_PORT_DIR, RS, OUTPUT_PIN);
+	__DIO_setPinDirection(LCD_CTRL_PORT_DIR, RW, OUTPUT_PIN);
+	__DIO_setPinDirection(LCD_CTRL_PORT_DIR, EN, OUTPUT_PIN);
+	/*Set Direction for LCD Data Bus as Output Port */
+	__DIO_setPortDirection(LCD_DATA_PORT_DIR, OUTPUT_PORT);
+
+	_LCD_sendCommand(TWO_LINE_LCD_Eight_BIT_MODE);
+	_LCD_sendCommand(CURSOR_STATE);
+	_LCD_sendCommand(CLEAR_SCREEN_COMMAND);
+}
+
+void _LCD_sendCommand(uint8 command)
+{
+	/* Clear RS Pin for LCD Command Mode */
+	__DIO_writeOutputPinValue(LCD_CTRL_PORT, RS, LOW);
+	/* Clear RW Pin for Write to LCD Mode */
+	__DIO_writeOutputPinValue(LCD_CTRL_PORT, RW, LOW);
+	for(cycle=0; cycle<50; cycle++); //delay in uSeconds/mSeconds
+	/* Set EN:enable Pin for fetching command from MC */
+	__DIO_writeOutputPinValue(LCD_CTRL_PORT, EN, HIGH);
+	for(cycle=0; cycle<50; cycle++); //delay in uSeconds/mSeconds
+	/* Send Command through LCD Data Bus */
+	__DIO_writeOutputPortValue(LCD_DATA_PORT, command);	//LCD_DATA_PORT = command;
+	for(cycle=0; cycle<50; cycle++); //delay in uSeconds/mSeconds
+	/* Clear EN:enable Pin for executing Command Over LCD */
+	__DIO_writeOutputPinValue(LCD_CTRL_PORT, EN, LOW);
+	for(cycle=0; cycle<50; cycle++); //delay in uSeconds/mSeconds
+}
+
+void _LCD_displayCharacter(uint8 data)
+{
+	/* Clear RS Pin for LCD Data Mode */
+	__DIO_writeOutputPinValue(LCD_CTRL_PORT, RS, HIGH);
+	/* Clear RW Pin for Write to LCD Mode */
+	__DIO_writeOutputPinValue(LCD_CTRL_PORT, RW, LOW);
+	for(cycle=0; cycle<50; cycle++); //delay in uSeconds/mSeconds
+	/* Set EN:enable Pin for fetching Data from MC */
+	__DIO_writeOutputPinValue(LCD_CTRL_PORT, EN, HIGH);
+	for(cycle=0; cycle<50; cycle++); //delay in uSeconds/mSeconds
+	/* Send Data through LCD Data Bus */
+	__DIO_writeOutputPortValue(LCD_DATA_PORT, data);  //LCD_DATA_PORT = data;
+	for(cycle=0; cycle<50; cycle++); //delay in uSeconds/mSeconds
+	/* Clear EN:enable Pin for displaying Data Over LCD */
+	__DIO_writeOutputPinValue(LCD_CTRL_PORT, EN, LOW);
+	for(cycle=0; cycle<50; cycle++); //delay in uSeconds/mSeconds
+}
+
+void _LCD_displayString(uint8 *string_data)
+{
+	while( *string_data != '\0' )
+	{
+		_LCD_displayCharacter(*string_data);
+		string_data++;
+	}
+}
+void _LCD_displayIntegerVariable(uint16 data)
+{
+	sint8 i=0, num_buff[8];
+
+	if( data == 0 )
+	{
+		_LCD_displayCharacter('0');
+		return;
+	}
+
+	while(data != 0)
+	{
+		num_buff[i] = (data%10)+48;
+		i++;
+		data /= 10;
+	}
+	i--;
+	while( i >= 0)
+	{
+		_LCD_displayCharacter(num_buff[i]);
+		i--;
+	}
+}
+
+void _LCD_adjustCursorPosition(uint8 row, uint8 col)
+{
+	uint8 location;
+
+	/*Adjust the correct location*/
+	switch(row)
+	{
+		case 1:
+			location = col;
+		break;
+		case 2:
+			location = col+0x40;
+		break;
+		case 3:
+			location = col+0x10;
+		break;
+		case 4:
+			location = col+0x50;
+		break;
+		default:break;
+	}
+	/*To Set the Cursor Location at specific place, send DDRAM Address OR 0x80 */
+	_LCD_sendCommand( (SET_CURSOR|location) );
+}
+void _LCD_displayString_atCursor(uint8 *string_data, uint8 row, uint8 col)
+{
+	_LCD_adjustCursorPosition(row, col);
+	_LCD_displayString(string_data);
+}
+void _LCD_clearScreen()
+{
+	_LCD_sendCommand(CLEAR_SCREEN_COMMAND);
+}
+
