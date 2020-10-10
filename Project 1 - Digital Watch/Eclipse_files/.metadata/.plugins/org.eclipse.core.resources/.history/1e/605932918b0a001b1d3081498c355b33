@@ -1,0 +1,104 @@
+/*
+ * app.c
+ *
+ *  Created on: Oct 9, 2020
+ *      Author: montasse
+ */
+
+/* Preprocessor Section *********************************************************************/
+#include "timer.h"
+/********************************************************************************************/
+
+/* Function Prototypes **********************************************************************/
+
+void DW_7SEG_screenDisplayFunction(void)
+void DW_TIMER1_ISR_callBackFunction(void);
+void DW_INT0_ISR_callBackFunction_Reset_Adjust_Buttons(void);
+void DW_INT1_ISR_callBackFunction_Start_Inc_Buttons(void);
+void DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons(void);
+/********************************************************************************************/
+
+
+/* Global Variables *************************************************************************/
+uint8 seconds=0;
+uint8 minutes=0;
+uint8 hours=0;
+/********************************************************************************************/
+
+
+/* Digital Watch Software Application *******************************************************/
+int main(void)
+{
+	uint8 _7seg_display[6];
+	configType_TIMER timer1_configs = {TIMER1, TIMER_F_CPU_64, 8000, OCx_DISABLED};
+	uint8 _7seg_select=0;
+
+	DDRC = 0b00111111;
+	PORTC = 0x00;
+
+	DDRA = 0b00001111;
+	PORTA = 0x00;
+
+	__TIMER_CTC_setISRCallBackFuncPointer(TIMER1, DW_TIMER1_ISR_callBackFunction);
+	__TIMER_CTC_startTimer(&timer1_configs);
+
+	while(1)
+	{
+		_7seg_display[0] = (seconds%10);
+		_7seg_display[1] = ((seconds/10)%10);
+		_7seg_display[2] = (minutes%10);
+		_7seg_display[3] = ((minutes/10)%10);
+		_7seg_display[0] = (hours%10);
+		_7seg_display[1] = ((seconds/10)%10);
+
+		_7seg_select++;
+
+		if( _7seg_select == 4 )
+			_7seg_select = 0;
+
+		PORTC = (1<<_7seg_select);
+
+		PORTA = _7seg_display[_7seg_select];
+
+		MILLI_DELAY;MILLI_DELAY;
+
+
+	}
+	return 0;
+}
+
+/******************************************************************/
+void DW_TIMER1_ISR_callBackFunction(void)
+{
+	seconds++;
+
+	if(seconds == 60)
+	{
+		seconds = 0;
+		minutes++;
+	}
+	if(minutes == 60)
+	{
+		minutes = 0;
+		hours++;
+	}
+}
+
+/******************************************************************/
+void DW_INT0_ISR_callBackFunction_Reset_Adjust_Buttons(void)
+{
+
+}
+
+/******************************************************************/
+void DW_INT1_ISR_callBackFunction_Start_Inc_Buttons(void)
+{
+
+}
+
+/******************************************************************/
+void DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons(void)
+{
+
+}
+/********************************************************************************************/

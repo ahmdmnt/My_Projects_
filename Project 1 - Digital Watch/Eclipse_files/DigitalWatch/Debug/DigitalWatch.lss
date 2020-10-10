@@ -1,0 +1,2154 @@
+
+DigitalWatch.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000d40  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000000c  00800060  00000d40  00000dd4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          0000001a  0080006c  0080006c  00000de0  2**0
+                  ALLOC
+  3 .stab         000012cc  00000000  00000000  00000de0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000e33  00000000  00000000  000020ac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 c9 02 	jmp	0x592	; 0x592 <__vector_1>
+   8:	0c 94 88 03 	jmp	0x710	; 0x710 <__vector_2>
+   c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  10:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  14:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  18:	0c 94 07 05 	jmp	0xa0e	; 0xa0e <__vector_6>
+  1c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  20:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  24:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  28:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  2c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  30:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  34:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  38:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  3c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  40:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  44:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+  48:	0c 94 47 04 	jmp	0x88e	; 0x88e <__vector_18>
+  4c:	0c 94 da 04 	jmp	0x9b4	; 0x9b4 <__vector_19>
+  50:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	e0 e4       	ldi	r30, 0x40	; 64
+  68:	fd e0       	ldi	r31, 0x0D	; 13
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <.do_copy_data_start>
+
+0000006c <.do_copy_data_loop>:
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+
+00000070 <.do_copy_data_start>:
+  70:	ac 36       	cpi	r26, 0x6C	; 108
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <.do_copy_data_loop>
+
+00000076 <__do_clear_bss>:
+  76:	10 e0       	ldi	r17, 0x00	; 0
+  78:	ac e6       	ldi	r26, 0x6C	; 108
+  7a:	b0 e0       	ldi	r27, 0x00	; 0
+  7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
+
+0000007e <.do_clear_bss_loop>:
+  7e:	1d 92       	st	X+, r1
+
+00000080 <.do_clear_bss_start>:
+  80:	a6 38       	cpi	r26, 0x86	; 134
+  82:	b1 07       	cpc	r27, r17
+  84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
+  86:	0e 94 49 00 	call	0x92	; 0x92 <main>
+  8a:	0c 94 9e 06 	jmp	0xd3c	; 0xd3c <_exit>
+
+0000008e <__bad_interrupt>:
+  8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000092 <main>:
+/********************************************************************************************/
+
+
+/* Digital Watch Software Application *******************************************************/
+int main(void)
+{
+  92:	df 93       	push	r29
+  94:	cf 93       	push	r28
+  96:	cd b7       	in	r28, 0x3d	; 61
+  98:	de b7       	in	r29, 0x3e	; 62
+
+	DW_systemPeripheralInit();
+  9a:	0e 94 92 00 	call	0x124	; 0x124 <DW_systemPeripheralInit>
+
+	while(1)
+	{
+		/* MODE Button: Navigate (Toggle) between Two Digital Watch Modes */
+		if( READ_BIT(PINB, PB1)==LOW )
+  9e:	e6 e3       	ldi	r30, 0x36	; 54
+  a0:	f0 e0       	ldi	r31, 0x00	; 0
+  a2:	80 81       	ld	r24, Z
+  a4:	88 2f       	mov	r24, r24
+  a6:	90 e0       	ldi	r25, 0x00	; 0
+  a8:	82 70       	andi	r24, 0x02	; 2
+  aa:	90 70       	andi	r25, 0x00	; 0
+  ac:	95 95       	asr	r25
+  ae:	87 95       	ror	r24
+  b0:	00 97       	sbiw	r24, 0x00	; 0
+  b2:	a9 f5       	brne	.+106    	; 0x11e <main+0x8c>
+		{
+			if(mode_status == DIGITAL_CLOCK_MODE)
+  b4:	80 91 6c 00 	lds	r24, 0x006C
+  b8:	88 23       	and	r24, r24
+  ba:	91 f4       	brne	.+36     	; 0xe0 <main+0x4e>
+			{
+				mode_status = STOP_WATCH_MODE;
+  bc:	81 e0       	ldi	r24, 0x01	; 1
+  be:	80 93 6c 00 	sts	0x006C, r24
+				PORTD |=  (1<<SW_LED);
+  c2:	a2 e3       	ldi	r26, 0x32	; 50
+  c4:	b0 e0       	ldi	r27, 0x00	; 0
+  c6:	e2 e3       	ldi	r30, 0x32	; 50
+  c8:	f0 e0       	ldi	r31, 0x00	; 0
+  ca:	80 81       	ld	r24, Z
+  cc:	82 60       	ori	r24, 0x02	; 2
+  ce:	8c 93       	st	X, r24
+				PORTD &= ~(1<<DC_LED);
+  d0:	a2 e3       	ldi	r26, 0x32	; 50
+  d2:	b0 e0       	ldi	r27, 0x00	; 0
+  d4:	e2 e3       	ldi	r30, 0x32	; 50
+  d6:	f0 e0       	ldi	r31, 0x00	; 0
+  d8:	80 81       	ld	r24, Z
+  da:	8e 7f       	andi	r24, 0xFE	; 254
+  dc:	8c 93       	st	X, r24
+  de:	14 c0       	rjmp	.+40     	; 0x108 <main+0x76>
+			}
+			else if(mode_status == STOP_WATCH_MODE)
+  e0:	80 91 6c 00 	lds	r24, 0x006C
+  e4:	81 30       	cpi	r24, 0x01	; 1
+  e6:	81 f4       	brne	.+32     	; 0x108 <main+0x76>
+			{
+				mode_status = DIGITAL_CLOCK_MODE;
+  e8:	10 92 6c 00 	sts	0x006C, r1
+				PORTD |=  (1<<DC_LED);
+  ec:	a2 e3       	ldi	r26, 0x32	; 50
+  ee:	b0 e0       	ldi	r27, 0x00	; 0
+  f0:	e2 e3       	ldi	r30, 0x32	; 50
+  f2:	f0 e0       	ldi	r31, 0x00	; 0
+  f4:	80 81       	ld	r24, Z
+  f6:	81 60       	ori	r24, 0x01	; 1
+  f8:	8c 93       	st	X, r24
+				PORTD &= ~(1<<SW_LED);
+  fa:	a2 e3       	ldi	r26, 0x32	; 50
+  fc:	b0 e0       	ldi	r27, 0x00	; 0
+  fe:	e2 e3       	ldi	r30, 0x32	; 50
+ 100:	f0 e0       	ldi	r31, 0x00	; 0
+ 102:	80 81       	ld	r24, Z
+ 104:	8d 7f       	andi	r24, 0xFD	; 253
+ 106:	8c 93       	st	X, r24
+			}
+
+			while( READ_BIT(PINB, PB1)==LOW );	//Block Code until user release button pressing
+ 108:	e6 e3       	ldi	r30, 0x36	; 54
+ 10a:	f0 e0       	ldi	r31, 0x00	; 0
+ 10c:	80 81       	ld	r24, Z
+ 10e:	88 2f       	mov	r24, r24
+ 110:	90 e0       	ldi	r25, 0x00	; 0
+ 112:	82 70       	andi	r24, 0x02	; 2
+ 114:	90 70       	andi	r25, 0x00	; 0
+ 116:	95 95       	asr	r25
+ 118:	87 95       	ror	r24
+ 11a:	00 97       	sbiw	r24, 0x00	; 0
+ 11c:	a9 f3       	breq	.-22     	; 0x108 <main+0x76>
+		}
+
+		/* Continuously Display the 7 Segment Output Data */
+		DW_7SEG_screenDisplayFunction();
+ 11e:	0e 94 ee 00 	call	0x1dc	; 0x1dc <DW_7SEG_screenDisplayFunction>
+ 122:	bd cf       	rjmp	.-134    	; 0x9e <main+0xc>
+
+00000124 <DW_systemPeripheralInit>:
+}
+
+
+/******************************************************************/
+void DW_systemPeripheralInit(void)
+{
+ 124:	df 93       	push	r29
+ 126:	cf 93       	push	r28
+ 128:	cd b7       	in	r28, 0x3d	; 61
+ 12a:	de b7       	in	r29, 0x3e	; 62
+	/* Initiate the 7 Segment Control Pins */
+	DDRC = 0b00111111;
+ 12c:	e4 e3       	ldi	r30, 0x34	; 52
+ 12e:	f0 e0       	ldi	r31, 0x00	; 0
+ 130:	8f e3       	ldi	r24, 0x3F	; 63
+ 132:	80 83       	st	Z, r24
+	PORTC = 0x00;
+ 134:	e5 e3       	ldi	r30, 0x35	; 53
+ 136:	f0 e0       	ldi	r31, 0x00	; 0
+ 138:	10 82       	st	Z, r1
+
+	/* Initiate the 7 Segment Data Pins*/
+	DDRA = 0b00001111;
+ 13a:	ea e3       	ldi	r30, 0x3A	; 58
+ 13c:	f0 e0       	ldi	r31, 0x00	; 0
+ 13e:	8f e0       	ldi	r24, 0x0F	; 15
+ 140:	80 83       	st	Z, r24
+	PORTA = 0x00;
+ 142:	eb e3       	ldi	r30, 0x3B	; 59
+ 144:	f0 e0       	ldi	r31, 0x00	; 0
+ 146:	10 82       	st	Z, r1
+
+	/* Set Timer1 Call Back function */
+	__TIMER_CTC_setISRCallBackFuncPointer(TIMER0, DW_TIMER0_ISR_callBackFunction_StopWatch);
+ 148:	2f ed       	ldi	r18, 0xDF	; 223
+ 14a:	31 e0       	ldi	r19, 0x01	; 1
+ 14c:	80 e0       	ldi	r24, 0x00	; 0
+ 14e:	b9 01       	movw	r22, r18
+ 150:	0e 94 34 05 	call	0xa68	; 0xa68 <__TIMER_CTC_setISRCallBackFuncPointer>
+	__TIMER_CTC_setISRCallBackFuncPointer(TIMER1, DW_TIMER1_ISR_callBackFunction_DigitalClock);
+ 154:	21 e0       	ldi	r18, 0x01	; 1
+ 156:	32 e0       	ldi	r19, 0x02	; 2
+ 158:	81 e0       	ldi	r24, 0x01	; 1
+ 15a:	b9 01       	movw	r22, r18
+ 15c:	0e 94 34 05 	call	0xa68	; 0xa68 <__TIMER_CTC_setISRCallBackFuncPointer>
+
+	/* Initiate External Interrupt 0 : Reset & Adjust Button */
+	__INT0_init(FALLING_EDGE, EN_PULLUP);
+ 160:	82 e0       	ldi	r24, 0x02	; 2
+ 162:	61 e0       	ldi	r22, 0x01	; 1
+ 164:	0e 94 08 03 	call	0x610	; 0x610 <__INT0_init>
+	__INT0_setISRCallBackFuncPointer(DW_INT0_ISR_callBackFunction_Reset_Adjust_Buttons);
+ 168:	83 e2       	ldi	r24, 0x23	; 35
+ 16a:	92 e0       	ldi	r25, 0x02	; 2
+ 16c:	0e 94 f6 02 	call	0x5ec	; 0x5ec <__INT0_setISRCallBackFuncPointer>
+
+	/* Initiate External Interrupt 1 : Start & Inc Button */
+	__INT1_init(FALLING_EDGE, EN_PULLUP);
+ 170:	82 e0       	ldi	r24, 0x02	; 2
+ 172:	61 e0       	ldi	r22, 0x01	; 1
+ 174:	0e 94 c7 03 	call	0x78e	; 0x78e <__INT1_init>
+	__INT1_setISRCallBackFuncPointer(DW_INT1_ISR_callBackFunction_Start_Inc_Buttons);
+ 178:	80 e5       	ldi	r24, 0x50	; 80
+ 17a:	92 e0       	ldi	r25, 0x02	; 2
+ 17c:	0e 94 b5 03 	call	0x76a	; 0x76a <__INT1_setISRCallBackFuncPointer>
+
+	/* Initiate External Interrupt 2 : Stop & Dec Button */
+	__INT2_init(FALLING_EDGE, EN_PULLUP);
+ 180:	82 e0       	ldi	r24, 0x02	; 2
+ 182:	61 e0       	ldi	r22, 0x01	; 1
+ 184:	0e 94 86 04 	call	0x90c	; 0x90c <__INT2_init>
+	__INT2_setISRCallBackFuncPointer(DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons);
+ 188:	8d e8       	ldi	r24, 0x8D	; 141
+ 18a:	92 e0       	ldi	r25, 0x02	; 2
+ 18c:	0e 94 74 04 	call	0x8e8	; 0x8e8 <__INT2_setISRCallBackFuncPointer>
+
+	/* Initiate DIO Pin (PB1) : Mode Button, Input Pin & Enable Internal Pullup Resistor */
+	DDRB  &= ~(1<<PB1);
+ 190:	a7 e3       	ldi	r26, 0x37	; 55
+ 192:	b0 e0       	ldi	r27, 0x00	; 0
+ 194:	e7 e3       	ldi	r30, 0x37	; 55
+ 196:	f0 e0       	ldi	r31, 0x00	; 0
+ 198:	80 81       	ld	r24, Z
+ 19a:	8d 7f       	andi	r24, 0xFD	; 253
+ 19c:	8c 93       	st	X, r24
+	PORTB |=  (1<<PB1);
+ 19e:	a8 e3       	ldi	r26, 0x38	; 56
+ 1a0:	b0 e0       	ldi	r27, 0x00	; 0
+ 1a2:	e8 e3       	ldi	r30, 0x38	; 56
+ 1a4:	f0 e0       	ldi	r31, 0x00	; 0
+ 1a6:	80 81       	ld	r24, Z
+ 1a8:	82 60       	ori	r24, 0x02	; 2
+ 1aa:	8c 93       	st	X, r24
+
+	/* Initiate Mode LED Indicators */
+	DDRD  |=  (1<<DC_LED) |  (1<<SW_LED);
+ 1ac:	a1 e3       	ldi	r26, 0x31	; 49
+ 1ae:	b0 e0       	ldi	r27, 0x00	; 0
+ 1b0:	e1 e3       	ldi	r30, 0x31	; 49
+ 1b2:	f0 e0       	ldi	r31, 0x00	; 0
+ 1b4:	80 81       	ld	r24, Z
+ 1b6:	83 60       	ori	r24, 0x03	; 3
+ 1b8:	8c 93       	st	X, r24
+	PORTD &= ~(1<<SW_LED);
+ 1ba:	a2 e3       	ldi	r26, 0x32	; 50
+ 1bc:	b0 e0       	ldi	r27, 0x00	; 0
+ 1be:	e2 e3       	ldi	r30, 0x32	; 50
+ 1c0:	f0 e0       	ldi	r31, 0x00	; 0
+ 1c2:	80 81       	ld	r24, Z
+ 1c4:	8d 7f       	andi	r24, 0xFD	; 253
+ 1c6:	8c 93       	st	X, r24
+	PORTD |=  (1<<DC_LED);
+ 1c8:	a2 e3       	ldi	r26, 0x32	; 50
+ 1ca:	b0 e0       	ldi	r27, 0x00	; 0
+ 1cc:	e2 e3       	ldi	r30, 0x32	; 50
+ 1ce:	f0 e0       	ldi	r31, 0x00	; 0
+ 1d0:	80 81       	ld	r24, Z
+ 1d2:	81 60       	ori	r24, 0x01	; 1
+ 1d4:	8c 93       	st	X, r24
+}
+ 1d6:	cf 91       	pop	r28
+ 1d8:	df 91       	pop	r29
+ 1da:	08 95       	ret
+
+000001dc <DW_7SEG_screenDisplayFunction>:
+
+/******************************************************************/
+void DW_7SEG_screenDisplayFunction(void)
+{
+ 1dc:	df 93       	push	r29
+ 1de:	cf 93       	push	r28
+ 1e0:	00 d0       	rcall	.+0      	; 0x1e2 <DW_7SEG_screenDisplayFunction+0x6>
+ 1e2:	cd b7       	in	r28, 0x3d	; 61
+ 1e4:	de b7       	in	r29, 0x3e	; 62
+	static uint8 _7seg_display[6];
+	static uint8 disp_selector;
+
+
+	/* Adjust the Clock Correct Values to Displayed, Depends on the Clock Mode */
+	switch(mode_status)
+ 1e6:	80 91 6c 00 	lds	r24, 0x006C
+ 1ea:	28 2f       	mov	r18, r24
+ 1ec:	30 e0       	ldi	r19, 0x00	; 0
+ 1ee:	3a 83       	std	Y+2, r19	; 0x02
+ 1f0:	29 83       	std	Y+1, r18	; 0x01
+ 1f2:	89 81       	ldd	r24, Y+1	; 0x01
+ 1f4:	9a 81       	ldd	r25, Y+2	; 0x02
+ 1f6:	00 97       	sbiw	r24, 0x00	; 0
+ 1f8:	39 f0       	breq	.+14     	; 0x208 <DW_7SEG_screenDisplayFunction+0x2c>
+ 1fa:	29 81       	ldd	r18, Y+1	; 0x01
+ 1fc:	3a 81       	ldd	r19, Y+2	; 0x02
+ 1fe:	21 30       	cpi	r18, 0x01	; 1
+ 200:	31 05       	cpc	r19, r1
+ 202:	09 f4       	brne	.+2      	; 0x206 <DW_7SEG_screenDisplayFunction+0x2a>
+ 204:	44 c0       	rjmp	.+136    	; 0x28e <DW_7SEG_screenDisplayFunction+0xb2>
+ 206:	85 c0       	rjmp	.+266    	; 0x312 <DW_7SEG_screenDisplayFunction+0x136>
+	{
+	case DIGITAL_CLOCK_MODE:
+		_7seg_display[SECONDS_1ST_DIGIT] = DC_seconds%10;
+ 208:	80 91 70 00 	lds	r24, 0x0070
+ 20c:	9a e0       	ldi	r25, 0x0A	; 10
+ 20e:	69 2f       	mov	r22, r25
+ 210:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 214:	89 2f       	mov	r24, r25
+ 216:	80 93 74 00 	sts	0x0074, r24
+		_7seg_display[SECONDS_2ND_DIGIT] = (DC_seconds/10)%10;
+ 21a:	80 91 70 00 	lds	r24, 0x0070
+ 21e:	9a e0       	ldi	r25, 0x0A	; 10
+ 220:	69 2f       	mov	r22, r25
+ 222:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 226:	9a e0       	ldi	r25, 0x0A	; 10
+ 228:	69 2f       	mov	r22, r25
+ 22a:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 22e:	89 2f       	mov	r24, r25
+ 230:	80 93 75 00 	sts	0x0075, r24
+		_7seg_display[MINUTES_1ST_DIGIT] = DC_minutes%10;
+ 234:	80 91 71 00 	lds	r24, 0x0071
+ 238:	9a e0       	ldi	r25, 0x0A	; 10
+ 23a:	69 2f       	mov	r22, r25
+ 23c:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 240:	89 2f       	mov	r24, r25
+ 242:	80 93 76 00 	sts	0x0076, r24
+		_7seg_display[MINUTES_2ND_DIGIT] = (DC_minutes/10)%10;
+ 246:	80 91 71 00 	lds	r24, 0x0071
+ 24a:	9a e0       	ldi	r25, 0x0A	; 10
+ 24c:	69 2f       	mov	r22, r25
+ 24e:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 252:	9a e0       	ldi	r25, 0x0A	; 10
+ 254:	69 2f       	mov	r22, r25
+ 256:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 25a:	89 2f       	mov	r24, r25
+ 25c:	80 93 77 00 	sts	0x0077, r24
+		_7seg_display[HOURS_1ST_DIGIT]   = DC_hours%10;
+ 260:	80 91 72 00 	lds	r24, 0x0072
+ 264:	9a e0       	ldi	r25, 0x0A	; 10
+ 266:	69 2f       	mov	r22, r25
+ 268:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 26c:	89 2f       	mov	r24, r25
+ 26e:	80 93 78 00 	sts	0x0078, r24
+		_7seg_display[HOURS_2ND_DIGIT]   = (DC_hours/10)%10;
+ 272:	80 91 72 00 	lds	r24, 0x0072
+ 276:	9a e0       	ldi	r25, 0x0A	; 10
+ 278:	69 2f       	mov	r22, r25
+ 27a:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 27e:	9a e0       	ldi	r25, 0x0A	; 10
+ 280:	69 2f       	mov	r22, r25
+ 282:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 286:	89 2f       	mov	r24, r25
+ 288:	80 93 79 00 	sts	0x0079, r24
+ 28c:	42 c0       	rjmp	.+132    	; 0x312 <DW_7SEG_screenDisplayFunction+0x136>
+	break;
+
+	case STOP_WATCH_MODE:
+		_7seg_display[SECONDS_1ST_DIGIT] = SW_seconds%10;
+ 28e:	80 91 6d 00 	lds	r24, 0x006D
+ 292:	9a e0       	ldi	r25, 0x0A	; 10
+ 294:	69 2f       	mov	r22, r25
+ 296:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 29a:	89 2f       	mov	r24, r25
+ 29c:	80 93 74 00 	sts	0x0074, r24
+		_7seg_display[SECONDS_2ND_DIGIT] = (SW_seconds/10)%10;
+ 2a0:	80 91 6d 00 	lds	r24, 0x006D
+ 2a4:	9a e0       	ldi	r25, 0x0A	; 10
+ 2a6:	69 2f       	mov	r22, r25
+ 2a8:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 2ac:	9a e0       	ldi	r25, 0x0A	; 10
+ 2ae:	69 2f       	mov	r22, r25
+ 2b0:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 2b4:	89 2f       	mov	r24, r25
+ 2b6:	80 93 75 00 	sts	0x0075, r24
+		_7seg_display[MINUTES_1ST_DIGIT] = SW_minutes%10;
+ 2ba:	80 91 6e 00 	lds	r24, 0x006E
+ 2be:	9a e0       	ldi	r25, 0x0A	; 10
+ 2c0:	69 2f       	mov	r22, r25
+ 2c2:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 2c6:	89 2f       	mov	r24, r25
+ 2c8:	80 93 76 00 	sts	0x0076, r24
+		_7seg_display[MINUTES_2ND_DIGIT] = (SW_minutes/10)%10;
+ 2cc:	80 91 6e 00 	lds	r24, 0x006E
+ 2d0:	9a e0       	ldi	r25, 0x0A	; 10
+ 2d2:	69 2f       	mov	r22, r25
+ 2d4:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 2d8:	9a e0       	ldi	r25, 0x0A	; 10
+ 2da:	69 2f       	mov	r22, r25
+ 2dc:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 2e0:	89 2f       	mov	r24, r25
+ 2e2:	80 93 77 00 	sts	0x0077, r24
+		_7seg_display[HOURS_1ST_DIGIT]   = SW_hours%10;
+ 2e6:	80 91 6f 00 	lds	r24, 0x006F
+ 2ea:	9a e0       	ldi	r25, 0x0A	; 10
+ 2ec:	69 2f       	mov	r22, r25
+ 2ee:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 2f2:	89 2f       	mov	r24, r25
+ 2f4:	80 93 78 00 	sts	0x0078, r24
+		_7seg_display[HOURS_2ND_DIGIT]   = (SW_hours/10)%10;
+ 2f8:	80 91 6f 00 	lds	r24, 0x006F
+ 2fc:	9a e0       	ldi	r25, 0x0A	; 10
+ 2fe:	69 2f       	mov	r22, r25
+ 300:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 304:	9a e0       	ldi	r25, 0x0A	; 10
+ 306:	69 2f       	mov	r22, r25
+ 308:	0e 94 92 06 	call	0xd24	; 0xd24 <__udivmodqi4>
+ 30c:	89 2f       	mov	r24, r25
+ 30e:	80 93 79 00 	sts	0x0079, r24
+	break;
+	default:break;
+	}
+
+	/* Loop over the [6] 7 Segments to Display Each number */
+	for(disp_selector=0 ; disp_selector<6 ; disp_selector++)
+ 312:	10 92 73 00 	sts	0x0073, r1
+ 316:	49 c0       	rjmp	.+146    	; 0x3aa <DW_7SEG_screenDisplayFunction+0x1ce>
+	{
+		/*Enable the desired 7 Segment Display*/
+		_7SEG_CTRL_PORT = (1<<disp_selector);
+ 318:	e5 e3       	ldi	r30, 0x35	; 53
+ 31a:	f0 e0       	ldi	r31, 0x00	; 0
+ 31c:	80 91 73 00 	lds	r24, 0x0073
+ 320:	28 2f       	mov	r18, r24
+ 322:	30 e0       	ldi	r19, 0x00	; 0
+ 324:	81 e0       	ldi	r24, 0x01	; 1
+ 326:	90 e0       	ldi	r25, 0x00	; 0
+ 328:	02 2e       	mov	r0, r18
+ 32a:	02 c0       	rjmp	.+4      	; 0x330 <DW_7SEG_screenDisplayFunction+0x154>
+ 32c:	88 0f       	add	r24, r24
+ 32e:	99 1f       	adc	r25, r25
+ 330:	0a 94       	dec	r0
+ 332:	e2 f7       	brpl	.-8      	; 0x32c <DW_7SEG_screenDisplayFunction+0x150>
+ 334:	80 83       	st	Z, r24
+		/*Output the desired value in Display*/
+		_7SEG_DATA_PORT = _7seg_display[disp_selector];
+ 336:	ab e3       	ldi	r26, 0x3B	; 59
+ 338:	b0 e0       	ldi	r27, 0x00	; 0
+ 33a:	80 91 73 00 	lds	r24, 0x0073
+ 33e:	88 2f       	mov	r24, r24
+ 340:	90 e0       	ldi	r25, 0x00	; 0
+ 342:	fc 01       	movw	r30, r24
+ 344:	ec 58       	subi	r30, 0x8C	; 140
+ 346:	ff 4f       	sbci	r31, 0xFF	; 255
+ 348:	80 81       	ld	r24, Z
+ 34a:	8c 93       	st	X, r24
+		/*Delay in uSeconds*/
+		MILLI_DELAY;MILLI_DELAY;
+ 34c:	10 92 85 00 	sts	0x0085, r1
+ 350:	10 92 84 00 	sts	0x0084, r1
+ 354:	09 c0       	rjmp	.+18     	; 0x368 <DW_7SEG_screenDisplayFunction+0x18c>
+ 356:	80 91 84 00 	lds	r24, 0x0084
+ 35a:	90 91 85 00 	lds	r25, 0x0085
+ 35e:	01 96       	adiw	r24, 0x01	; 1
+ 360:	90 93 85 00 	sts	0x0085, r25
+ 364:	80 93 84 00 	sts	0x0084, r24
+ 368:	80 91 84 00 	lds	r24, 0x0084
+ 36c:	90 91 85 00 	lds	r25, 0x0085
+ 370:	8a 30       	cpi	r24, 0x0A	; 10
+ 372:	91 05       	cpc	r25, r1
+ 374:	80 f3       	brcs	.-32     	; 0x356 <DW_7SEG_screenDisplayFunction+0x17a>
+ 376:	10 92 85 00 	sts	0x0085, r1
+ 37a:	10 92 84 00 	sts	0x0084, r1
+ 37e:	09 c0       	rjmp	.+18     	; 0x392 <DW_7SEG_screenDisplayFunction+0x1b6>
+ 380:	80 91 84 00 	lds	r24, 0x0084
+ 384:	90 91 85 00 	lds	r25, 0x0085
+ 388:	01 96       	adiw	r24, 0x01	; 1
+ 38a:	90 93 85 00 	sts	0x0085, r25
+ 38e:	80 93 84 00 	sts	0x0084, r24
+ 392:	80 91 84 00 	lds	r24, 0x0084
+ 396:	90 91 85 00 	lds	r25, 0x0085
+ 39a:	8a 30       	cpi	r24, 0x0A	; 10
+ 39c:	91 05       	cpc	r25, r1
+ 39e:	80 f3       	brcs	.-32     	; 0x380 <DW_7SEG_screenDisplayFunction+0x1a4>
+	break;
+	default:break;
+	}
+
+	/* Loop over the [6] 7 Segments to Display Each number */
+	for(disp_selector=0 ; disp_selector<6 ; disp_selector++)
+ 3a0:	80 91 73 00 	lds	r24, 0x0073
+ 3a4:	8f 5f       	subi	r24, 0xFF	; 255
+ 3a6:	80 93 73 00 	sts	0x0073, r24
+ 3aa:	80 91 73 00 	lds	r24, 0x0073
+ 3ae:	86 30       	cpi	r24, 0x06	; 6
+ 3b0:	08 f4       	brcc	.+2      	; 0x3b4 <DW_7SEG_screenDisplayFunction+0x1d8>
+ 3b2:	b2 cf       	rjmp	.-156    	; 0x318 <DW_7SEG_screenDisplayFunction+0x13c>
+		_7SEG_DATA_PORT = _7seg_display[disp_selector];
+		/*Delay in uSeconds*/
+		MILLI_DELAY;MILLI_DELAY;
+	}
+
+}
+ 3b4:	0f 90       	pop	r0
+ 3b6:	0f 90       	pop	r0
+ 3b8:	cf 91       	pop	r28
+ 3ba:	df 91       	pop	r29
+ 3bc:	08 95       	ret
+
+000003be <DW_TIMER0_ISR_callBackFunction_StopWatch>:
+
+/******************************************************************/
+void DW_TIMER0_ISR_callBackFunction_StopWatch(void) // STOP WATCH TIMER
+{
+ 3be:	df 93       	push	r29
+ 3c0:	cf 93       	push	r28
+ 3c2:	cd b7       	in	r28, 0x3d	; 61
+ 3c4:	de b7       	in	r29, 0x3e	; 62
+	SW_seconds++;
+ 3c6:	80 91 6d 00 	lds	r24, 0x006D
+ 3ca:	8f 5f       	subi	r24, 0xFF	; 255
+ 3cc:	80 93 6d 00 	sts	0x006D, r24
+
+	if(SW_seconds == 60)
+ 3d0:	80 91 6d 00 	lds	r24, 0x006D
+ 3d4:	8c 33       	cpi	r24, 0x3C	; 60
+ 3d6:	39 f4       	brne	.+14     	; 0x3e6 <DW_TIMER0_ISR_callBackFunction_StopWatch+0x28>
+	{
+		SW_seconds = 0;
+ 3d8:	10 92 6d 00 	sts	0x006D, r1
+		SW_minutes++;
+ 3dc:	80 91 6e 00 	lds	r24, 0x006E
+ 3e0:	8f 5f       	subi	r24, 0xFF	; 255
+ 3e2:	80 93 6e 00 	sts	0x006E, r24
+	}
+	if(SW_minutes == 60)
+ 3e6:	80 91 6e 00 	lds	r24, 0x006E
+ 3ea:	8c 33       	cpi	r24, 0x3C	; 60
+ 3ec:	39 f4       	brne	.+14     	; 0x3fc <DW_TIMER0_ISR_callBackFunction_StopWatch+0x3e>
+	{
+		SW_minutes = 0;
+ 3ee:	10 92 6e 00 	sts	0x006E, r1
+		SW_hours++;
+ 3f2:	80 91 6f 00 	lds	r24, 0x006F
+ 3f6:	8f 5f       	subi	r24, 0xFF	; 255
+ 3f8:	80 93 6f 00 	sts	0x006F, r24
+	}
+}
+ 3fc:	cf 91       	pop	r28
+ 3fe:	df 91       	pop	r29
+ 400:	08 95       	ret
+
+00000402 <DW_TIMER1_ISR_callBackFunction_DigitalClock>:
+
+/******************************************************************/
+void DW_TIMER1_ISR_callBackFunction_DigitalClock(void) // DIGITAL CLOCK TIMER
+{
+ 402:	df 93       	push	r29
+ 404:	cf 93       	push	r28
+ 406:	cd b7       	in	r28, 0x3d	; 61
+ 408:	de b7       	in	r29, 0x3e	; 62
+	DC_seconds++;
+ 40a:	80 91 70 00 	lds	r24, 0x0070
+ 40e:	8f 5f       	subi	r24, 0xFF	; 255
+ 410:	80 93 70 00 	sts	0x0070, r24
+
+	if(DC_seconds == 60)
+ 414:	80 91 70 00 	lds	r24, 0x0070
+ 418:	8c 33       	cpi	r24, 0x3C	; 60
+ 41a:	39 f4       	brne	.+14     	; 0x42a <DW_TIMER1_ISR_callBackFunction_DigitalClock+0x28>
+	{
+		DC_seconds = 0;
+ 41c:	10 92 70 00 	sts	0x0070, r1
+		DC_minutes++;
+ 420:	80 91 71 00 	lds	r24, 0x0071
+ 424:	8f 5f       	subi	r24, 0xFF	; 255
+ 426:	80 93 71 00 	sts	0x0071, r24
+	}
+	if(SW_minutes == 60)
+ 42a:	80 91 6e 00 	lds	r24, 0x006E
+ 42e:	8c 33       	cpi	r24, 0x3C	; 60
+ 430:	39 f4       	brne	.+14     	; 0x440 <DW_TIMER1_ISR_callBackFunction_DigitalClock+0x3e>
+	{
+		DC_minutes = 0;
+ 432:	10 92 71 00 	sts	0x0071, r1
+		DC_hours++;
+ 436:	80 91 72 00 	lds	r24, 0x0072
+ 43a:	8f 5f       	subi	r24, 0xFF	; 255
+ 43c:	80 93 72 00 	sts	0x0072, r24
+	}
+}
+ 440:	cf 91       	pop	r28
+ 442:	df 91       	pop	r29
+ 444:	08 95       	ret
+
+00000446 <DW_INT0_ISR_callBackFunction_Reset_Adjust_Buttons>:
+
+/******************************************************************/
+void DW_INT0_ISR_callBackFunction_Reset_Adjust_Buttons(void)
+{
+ 446:	df 93       	push	r29
+ 448:	cf 93       	push	r28
+ 44a:	cd b7       	in	r28, 0x3d	; 61
+ 44c:	de b7       	in	r29, 0x3e	; 62
+	/* Digital Clock Mode: Adjust Button functionality */
+	if( mode_status == DIGITAL_CLOCK_MODE )
+ 44e:	80 91 6c 00 	lds	r24, 0x006C
+ 452:	88 23       	and	r24, r24
+ 454:	c1 f4       	brne	.+48     	; 0x486 <__stack+0x27>
+	{
+		adjust_mode++;
+ 456:	80 91 6a 00 	lds	r24, 0x006A
+ 45a:	8f 5f       	subi	r24, 0xFF	; 255
+ 45c:	80 93 6a 00 	sts	0x006A, r24
+		if( adjust_mode == 4 )
+ 460:	80 91 6a 00 	lds	r24, 0x006A
+ 464:	84 30       	cpi	r24, 0x04	; 4
+ 466:	11 f4       	brne	.+4      	; 0x46c <__stack+0xd>
+		{
+			adjust_mode = 0;
+ 468:	10 92 6a 00 	sts	0x006A, r1
+		}
+
+		if( adjust_mode == 0 )
+ 46c:	80 91 6a 00 	lds	r24, 0x006A
+ 470:	88 23       	and	r24, r24
+ 472:	29 f4       	brne	.+10     	; 0x47e <__stack+0x1f>
+		{
+			__TIMER_CTC_startTimer(&timer1_configs);
+ 474:	80 e6       	ldi	r24, 0x60	; 96
+ 476:	90 e0       	ldi	r25, 0x00	; 0
+ 478:	0e 94 62 05 	call	0xac4	; 0xac4 <__TIMER_CTC_startTimer>
+ 47c:	0e c0       	rjmp	.+28     	; 0x49a <__stack+0x3b>
+		}
+		else
+		{
+			__TIMER_CTC_stopTimer(TIMER1);
+ 47e:	81 e0       	ldi	r24, 0x01	; 1
+ 480:	0e 94 42 06 	call	0xc84	; 0xc84 <__TIMER_CTC_stopTimer>
+ 484:	0a c0       	rjmp	.+20     	; 0x49a <__stack+0x3b>
+		}
+	}
+	/* Stop Watch Mode: Reset Button functionality */
+	else if( mode_status == STOP_WATCH_MODE )
+ 486:	80 91 6c 00 	lds	r24, 0x006C
+ 48a:	81 30       	cpi	r24, 0x01	; 1
+ 48c:	31 f4       	brne	.+12     	; 0x49a <__stack+0x3b>
+	{
+		SW_seconds = 0;
+ 48e:	10 92 6d 00 	sts	0x006D, r1
+		SW_minutes = 0;
+ 492:	10 92 6e 00 	sts	0x006E, r1
+		SW_hours   = 0;
+ 496:	10 92 6f 00 	sts	0x006F, r1
+	}
+}
+ 49a:	cf 91       	pop	r28
+ 49c:	df 91       	pop	r29
+ 49e:	08 95       	ret
+
+000004a0 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons>:
+
+/******************************************************************/
+void DW_INT1_ISR_callBackFunction_Start_Inc_Buttons(void)
+{
+ 4a0:	df 93       	push	r29
+ 4a2:	cf 93       	push	r28
+ 4a4:	00 d0       	rcall	.+0      	; 0x4a6 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x6>
+ 4a6:	cd b7       	in	r28, 0x3d	; 61
+ 4a8:	de b7       	in	r29, 0x3e	; 62
+	/* Digital Clock Mode: Increment Button functionality */
+	if( mode_status == DIGITAL_CLOCK_MODE )
+ 4aa:	80 91 6c 00 	lds	r24, 0x006C
+ 4ae:	88 23       	and	r24, r24
+ 4b0:	39 f5       	brne	.+78     	; 0x500 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x60>
+	{
+		switch(adjust_mode)
+ 4b2:	80 91 6a 00 	lds	r24, 0x006A
+ 4b6:	28 2f       	mov	r18, r24
+ 4b8:	30 e0       	ldi	r19, 0x00	; 0
+ 4ba:	3a 83       	std	Y+2, r19	; 0x02
+ 4bc:	29 83       	std	Y+1, r18	; 0x01
+ 4be:	89 81       	ldd	r24, Y+1	; 0x01
+ 4c0:	9a 81       	ldd	r25, Y+2	; 0x02
+ 4c2:	82 30       	cpi	r24, 0x02	; 2
+ 4c4:	91 05       	cpc	r25, r1
+ 4c6:	81 f0       	breq	.+32     	; 0x4e8 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x48>
+ 4c8:	29 81       	ldd	r18, Y+1	; 0x01
+ 4ca:	3a 81       	ldd	r19, Y+2	; 0x02
+ 4cc:	23 30       	cpi	r18, 0x03	; 3
+ 4ce:	31 05       	cpc	r19, r1
+ 4d0:	89 f0       	breq	.+34     	; 0x4f4 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x54>
+ 4d2:	89 81       	ldd	r24, Y+1	; 0x01
+ 4d4:	9a 81       	ldd	r25, Y+2	; 0x02
+ 4d6:	81 30       	cpi	r24, 0x01	; 1
+ 4d8:	91 05       	cpc	r25, r1
+ 4da:	d1 f4       	brne	.+52     	; 0x510 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x70>
+		{
+		case ADJUST_SEC:	// Case adjusting Seconds
+			DC_seconds++;
+ 4dc:	80 91 70 00 	lds	r24, 0x0070
+ 4e0:	8f 5f       	subi	r24, 0xFF	; 255
+ 4e2:	80 93 70 00 	sts	0x0070, r24
+ 4e6:	14 c0       	rjmp	.+40     	; 0x510 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x70>
+		break;
+		case ADJUST_MIN:	// Case adjusting Minutes
+			DC_minutes++;
+ 4e8:	80 91 71 00 	lds	r24, 0x0071
+ 4ec:	8f 5f       	subi	r24, 0xFF	; 255
+ 4ee:	80 93 71 00 	sts	0x0071, r24
+ 4f2:	0e c0       	rjmp	.+28     	; 0x510 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x70>
+		break;
+		case ADJUST_HRS:	// Case adjusting Hours
+			DC_hours++;
+ 4f4:	80 91 72 00 	lds	r24, 0x0072
+ 4f8:	8f 5f       	subi	r24, 0xFF	; 255
+ 4fa:	80 93 72 00 	sts	0x0072, r24
+ 4fe:	08 c0       	rjmp	.+16     	; 0x510 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x70>
+		break;
+		default:break;
+		}
+	}
+	/* Stop Watch Mode: Start Button functionality */
+	else if( mode_status == STOP_WATCH_MODE )
+ 500:	80 91 6c 00 	lds	r24, 0x006C
+ 504:	81 30       	cpi	r24, 0x01	; 1
+ 506:	21 f4       	brne	.+8      	; 0x510 <DW_INT1_ISR_callBackFunction_Start_Inc_Buttons+0x70>
+	{
+		__TIMER_CTC_startTimer(&timer0_configs);
+ 508:	85 e6       	ldi	r24, 0x65	; 101
+ 50a:	90 e0       	ldi	r25, 0x00	; 0
+ 50c:	0e 94 62 05 	call	0xac4	; 0xac4 <__TIMER_CTC_startTimer>
+	}
+}
+ 510:	0f 90       	pop	r0
+ 512:	0f 90       	pop	r0
+ 514:	cf 91       	pop	r28
+ 516:	df 91       	pop	r29
+ 518:	08 95       	ret
+
+0000051a <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons>:
+
+/******************************************************************/
+void DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons(void)
+{
+ 51a:	df 93       	push	r29
+ 51c:	cf 93       	push	r28
+ 51e:	00 d0       	rcall	.+0      	; 0x520 <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x6>
+ 520:	cd b7       	in	r28, 0x3d	; 61
+ 522:	de b7       	in	r29, 0x3e	; 62
+	/* Digital Clock Mode: Decrement Button functionality */
+	if( mode_status == DIGITAL_CLOCK_MODE )
+ 524:	80 91 6c 00 	lds	r24, 0x006C
+ 528:	88 23       	and	r24, r24
+ 52a:	39 f5       	brne	.+78     	; 0x57a <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x60>
+	{
+		switch(adjust_mode)
+ 52c:	80 91 6a 00 	lds	r24, 0x006A
+ 530:	28 2f       	mov	r18, r24
+ 532:	30 e0       	ldi	r19, 0x00	; 0
+ 534:	3a 83       	std	Y+2, r19	; 0x02
+ 536:	29 83       	std	Y+1, r18	; 0x01
+ 538:	89 81       	ldd	r24, Y+1	; 0x01
+ 53a:	9a 81       	ldd	r25, Y+2	; 0x02
+ 53c:	82 30       	cpi	r24, 0x02	; 2
+ 53e:	91 05       	cpc	r25, r1
+ 540:	81 f0       	breq	.+32     	; 0x562 <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x48>
+ 542:	29 81       	ldd	r18, Y+1	; 0x01
+ 544:	3a 81       	ldd	r19, Y+2	; 0x02
+ 546:	23 30       	cpi	r18, 0x03	; 3
+ 548:	31 05       	cpc	r19, r1
+ 54a:	89 f0       	breq	.+34     	; 0x56e <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x54>
+ 54c:	89 81       	ldd	r24, Y+1	; 0x01
+ 54e:	9a 81       	ldd	r25, Y+2	; 0x02
+ 550:	81 30       	cpi	r24, 0x01	; 1
+ 552:	91 05       	cpc	r25, r1
+ 554:	c9 f4       	brne	.+50     	; 0x588 <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x6e>
+		{
+		case ADJUST_SEC:	// Case adjusting Seconds
+			DC_seconds--;
+ 556:	80 91 70 00 	lds	r24, 0x0070
+ 55a:	81 50       	subi	r24, 0x01	; 1
+ 55c:	80 93 70 00 	sts	0x0070, r24
+ 560:	13 c0       	rjmp	.+38     	; 0x588 <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x6e>
+		break;
+		case ADJUST_MIN:	// Case adjusting Minutes
+			DC_minutes--;
+ 562:	80 91 71 00 	lds	r24, 0x0071
+ 566:	81 50       	subi	r24, 0x01	; 1
+ 568:	80 93 71 00 	sts	0x0071, r24
+ 56c:	0d c0       	rjmp	.+26     	; 0x588 <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x6e>
+		break;
+		case ADJUST_HRS:	// Case adjusting Hours
+			DC_hours--;
+ 56e:	80 91 72 00 	lds	r24, 0x0072
+ 572:	81 50       	subi	r24, 0x01	; 1
+ 574:	80 93 72 00 	sts	0x0072, r24
+ 578:	07 c0       	rjmp	.+14     	; 0x588 <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x6e>
+		break;
+		default:break;
+		}
+	}
+	/* Stop Watch Mode: Stop Button functionality */
+	else if( mode_status == STOP_WATCH_MODE )
+ 57a:	80 91 6c 00 	lds	r24, 0x006C
+ 57e:	81 30       	cpi	r24, 0x01	; 1
+ 580:	19 f4       	brne	.+6      	; 0x588 <DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons+0x6e>
+	{
+		__TIMER_CTC_stopTimer(TIMER0);
+ 582:	80 e0       	ldi	r24, 0x00	; 0
+ 584:	0e 94 42 06 	call	0xc84	; 0xc84 <__TIMER_CTC_stopTimer>
+	}
+}
+ 588:	0f 90       	pop	r0
+ 58a:	0f 90       	pop	r0
+ 58c:	cf 91       	pop	r28
+ 58e:	df 91       	pop	r29
+ 590:	08 95       	ret
+
+00000592 <__vector_1>:
+#ifdef _INT0
+
+    /*** ISR Description:-
+     * ISR Call the global pointer to function to execute desired code */
+    ISR(INT0_vect)
+    {
+ 592:	1f 92       	push	r1
+ 594:	0f 92       	push	r0
+ 596:	0f b6       	in	r0, 0x3f	; 63
+ 598:	0f 92       	push	r0
+ 59a:	11 24       	eor	r1, r1
+ 59c:	2f 93       	push	r18
+ 59e:	3f 93       	push	r19
+ 5a0:	4f 93       	push	r20
+ 5a2:	5f 93       	push	r21
+ 5a4:	6f 93       	push	r22
+ 5a6:	7f 93       	push	r23
+ 5a8:	8f 93       	push	r24
+ 5aa:	9f 93       	push	r25
+ 5ac:	af 93       	push	r26
+ 5ae:	bf 93       	push	r27
+ 5b0:	ef 93       	push	r30
+ 5b2:	ff 93       	push	r31
+ 5b4:	df 93       	push	r29
+ 5b6:	cf 93       	push	r28
+ 5b8:	cd b7       	in	r28, 0x3d	; 61
+ 5ba:	de b7       	in	r29, 0x3e	; 62
+        (*g_INT0_callBack_ptr)();
+ 5bc:	e0 91 7a 00 	lds	r30, 0x007A
+ 5c0:	f0 91 7b 00 	lds	r31, 0x007B
+ 5c4:	09 95       	icall
+    }
+ 5c6:	cf 91       	pop	r28
+ 5c8:	df 91       	pop	r29
+ 5ca:	ff 91       	pop	r31
+ 5cc:	ef 91       	pop	r30
+ 5ce:	bf 91       	pop	r27
+ 5d0:	af 91       	pop	r26
+ 5d2:	9f 91       	pop	r25
+ 5d4:	8f 91       	pop	r24
+ 5d6:	7f 91       	pop	r23
+ 5d8:	6f 91       	pop	r22
+ 5da:	5f 91       	pop	r21
+ 5dc:	4f 91       	pop	r20
+ 5de:	3f 91       	pop	r19
+ 5e0:	2f 91       	pop	r18
+ 5e2:	0f 90       	pop	r0
+ 5e4:	0f be       	out	0x3f, r0	; 63
+ 5e6:	0f 90       	pop	r0
+ 5e8:	1f 90       	pop	r1
+ 5ea:	18 95       	reti
+
+000005ec <__INT0_setISRCallBackFuncPointer>:
+
+    /*** Description:-
+     * Function used to set the Global Pointer called by ISR,
+     * with the Developer created function */
+    void __INT0_setISRCallBackFuncPointer(void (*ptr_to_func)(void))
+    {
+ 5ec:	df 93       	push	r29
+ 5ee:	cf 93       	push	r28
+ 5f0:	00 d0       	rcall	.+0      	; 0x5f2 <__INT0_setISRCallBackFuncPointer+0x6>
+ 5f2:	cd b7       	in	r28, 0x3d	; 61
+ 5f4:	de b7       	in	r29, 0x3e	; 62
+ 5f6:	9a 83       	std	Y+2, r25	; 0x02
+ 5f8:	89 83       	std	Y+1, r24	; 0x01
+        g_INT0_callBack_ptr = ptr_to_func;
+ 5fa:	89 81       	ldd	r24, Y+1	; 0x01
+ 5fc:	9a 81       	ldd	r25, Y+2	; 0x02
+ 5fe:	90 93 7b 00 	sts	0x007B, r25
+ 602:	80 93 7a 00 	sts	0x007A, r24
+    }
+ 606:	0f 90       	pop	r0
+ 608:	0f 90       	pop	r0
+ 60a:	cf 91       	pop	r28
+ 60c:	df 91       	pop	r29
+ 60e:	08 95       	ret
+
+00000610 <__INT0_init>:
+    /*** Description:-
+     * Function To enable EXT Interrupt 0, Fu Args: "sense_control"
+     * sense_control Values = LOW_LOGIC /  LOGIC_CHANGE / FALLING_EDGE / RISING_EDGE
+     * pullupResistor = EN_PULLUP / DIS_PULLUP */
+    void __INT0_init(uint8 sense_control, uint8 pullupResistor)
+    {
+ 610:	df 93       	push	r29
+ 612:	cf 93       	push	r28
+ 614:	00 d0       	rcall	.+0      	; 0x616 <__INT0_init+0x6>
+ 616:	00 d0       	rcall	.+0      	; 0x618 <__INT0_init+0x8>
+ 618:	cd b7       	in	r28, 0x3d	; 61
+ 61a:	de b7       	in	r29, 0x3e	; 62
+ 61c:	89 83       	std	Y+1, r24	; 0x01
+ 61e:	6a 83       	std	Y+2, r22	; 0x02
+        /*Disable Global Interrupt Flag; Critical Section*/
+        DIS_GLOBAL_INTERRUPT;
+ 620:	af e5       	ldi	r26, 0x5F	; 95
+ 622:	b0 e0       	ldi	r27, 0x00	; 0
+ 624:	ef e5       	ldi	r30, 0x5F	; 95
+ 626:	f0 e0       	ldi	r31, 0x00	; 0
+ 628:	80 81       	ld	r24, Z
+ 62a:	8f 77       	andi	r24, 0x7F	; 127
+ 62c:	8c 93       	st	X, r24
+        /*Configure INT0/PD2 as input pin*/
+        DDRD  &= (~(1<<PD2));
+ 62e:	a1 e3       	ldi	r26, 0x31	; 49
+ 630:	b0 e0       	ldi	r27, 0x00	; 0
+ 632:	e1 e3       	ldi	r30, 0x31	; 49
+ 634:	f0 e0       	ldi	r31, 0x00	; 0
+ 636:	80 81       	ld	r24, Z
+ 638:	8b 7f       	andi	r24, 0xFB	; 251
+ 63a:	8c 93       	st	X, r24
+        if(pullupResistor)
+ 63c:	8a 81       	ldd	r24, Y+2	; 0x02
+ 63e:	88 23       	and	r24, r24
+ 640:	39 f0       	breq	.+14     	; 0x650 <__INT0_init+0x40>
+        {
+        	PORTD |= (1<<PD2);
+ 642:	a2 e3       	ldi	r26, 0x32	; 50
+ 644:	b0 e0       	ldi	r27, 0x00	; 0
+ 646:	e2 e3       	ldi	r30, 0x32	; 50
+ 648:	f0 e0       	ldi	r31, 0x00	; 0
+ 64a:	80 81       	ld	r24, Z
+ 64c:	84 60       	ori	r24, 0x04	; 4
+ 64e:	8c 93       	st	X, r24
+        }
+        /*Enable (INT0) Module Interrupt flag*/
+        GICR |= (1<<INT0);
+ 650:	ab e5       	ldi	r26, 0x5B	; 91
+ 652:	b0 e0       	ldi	r27, 0x00	; 0
+ 654:	eb e5       	ldi	r30, 0x5B	; 91
+ 656:	f0 e0       	ldi	r31, 0x00	; 0
+ 658:	80 81       	ld	r24, Z
+ 65a:	80 64       	ori	r24, 0x40	; 64
+ 65c:	8c 93       	st	X, r24
+        /*write ISC00 and ISC01 bits according to sense control value*/
+        switch(sense_control)
+ 65e:	89 81       	ldd	r24, Y+1	; 0x01
+ 660:	28 2f       	mov	r18, r24
+ 662:	30 e0       	ldi	r19, 0x00	; 0
+ 664:	3c 83       	std	Y+4, r19	; 0x04
+ 666:	2b 83       	std	Y+3, r18	; 0x03
+ 668:	8b 81       	ldd	r24, Y+3	; 0x03
+ 66a:	9c 81       	ldd	r25, Y+4	; 0x04
+ 66c:	81 30       	cpi	r24, 0x01	; 1
+ 66e:	91 05       	cpc	r25, r1
+ 670:	e9 f0       	breq	.+58     	; 0x6ac <__INT0_init+0x9c>
+ 672:	2b 81       	ldd	r18, Y+3	; 0x03
+ 674:	3c 81       	ldd	r19, Y+4	; 0x04
+ 676:	22 30       	cpi	r18, 0x02	; 2
+ 678:	31 05       	cpc	r19, r1
+ 67a:	2c f4       	brge	.+10     	; 0x686 <__INT0_init+0x76>
+ 67c:	8b 81       	ldd	r24, Y+3	; 0x03
+ 67e:	9c 81       	ldd	r25, Y+4	; 0x04
+ 680:	00 97       	sbiw	r24, 0x00	; 0
+ 682:	61 f0       	breq	.+24     	; 0x69c <__INT0_init+0x8c>
+ 684:	37 c0       	rjmp	.+110    	; 0x6f4 <__INT0_init+0xe4>
+ 686:	2b 81       	ldd	r18, Y+3	; 0x03
+ 688:	3c 81       	ldd	r19, Y+4	; 0x04
+ 68a:	22 30       	cpi	r18, 0x02	; 2
+ 68c:	31 05       	cpc	r19, r1
+ 68e:	e9 f0       	breq	.+58     	; 0x6ca <__INT0_init+0xba>
+ 690:	8b 81       	ldd	r24, Y+3	; 0x03
+ 692:	9c 81       	ldd	r25, Y+4	; 0x04
+ 694:	83 30       	cpi	r24, 0x03	; 3
+ 696:	91 05       	cpc	r25, r1
+ 698:	39 f1       	breq	.+78     	; 0x6e8 <__INT0_init+0xd8>
+ 69a:	2c c0       	rjmp	.+88     	; 0x6f4 <__INT0_init+0xe4>
+        {
+            case LOW_LOGIC:
+                MCUCR &= (~(1<<ISC00)) & (~(1<<ISC01));
+ 69c:	a5 e5       	ldi	r26, 0x55	; 85
+ 69e:	b0 e0       	ldi	r27, 0x00	; 0
+ 6a0:	e5 e5       	ldi	r30, 0x55	; 85
+ 6a2:	f0 e0       	ldi	r31, 0x00	; 0
+ 6a4:	80 81       	ld	r24, Z
+ 6a6:	8c 7f       	andi	r24, 0xFC	; 252
+ 6a8:	8c 93       	st	X, r24
+ 6aa:	24 c0       	rjmp	.+72     	; 0x6f4 <__INT0_init+0xe4>
+            break;
+
+            case LOGIC_CHANGE:
+                MCUCR |= (1<<ISC00);
+ 6ac:	a5 e5       	ldi	r26, 0x55	; 85
+ 6ae:	b0 e0       	ldi	r27, 0x00	; 0
+ 6b0:	e5 e5       	ldi	r30, 0x55	; 85
+ 6b2:	f0 e0       	ldi	r31, 0x00	; 0
+ 6b4:	80 81       	ld	r24, Z
+ 6b6:	81 60       	ori	r24, 0x01	; 1
+ 6b8:	8c 93       	st	X, r24
+                MCUCR &= (~(1<<ISC01));
+ 6ba:	a5 e5       	ldi	r26, 0x55	; 85
+ 6bc:	b0 e0       	ldi	r27, 0x00	; 0
+ 6be:	e5 e5       	ldi	r30, 0x55	; 85
+ 6c0:	f0 e0       	ldi	r31, 0x00	; 0
+ 6c2:	80 81       	ld	r24, Z
+ 6c4:	8d 7f       	andi	r24, 0xFD	; 253
+ 6c6:	8c 93       	st	X, r24
+ 6c8:	15 c0       	rjmp	.+42     	; 0x6f4 <__INT0_init+0xe4>
+            break;
+
+            case FALLING_EDGE:
+                MCUCR &= (~(1<<ISC00));
+ 6ca:	a5 e5       	ldi	r26, 0x55	; 85
+ 6cc:	b0 e0       	ldi	r27, 0x00	; 0
+ 6ce:	e5 e5       	ldi	r30, 0x55	; 85
+ 6d0:	f0 e0       	ldi	r31, 0x00	; 0
+ 6d2:	80 81       	ld	r24, Z
+ 6d4:	8e 7f       	andi	r24, 0xFE	; 254
+ 6d6:	8c 93       	st	X, r24
+                MCUCR |= (1<<ISC01);
+ 6d8:	a5 e5       	ldi	r26, 0x55	; 85
+ 6da:	b0 e0       	ldi	r27, 0x00	; 0
+ 6dc:	e5 e5       	ldi	r30, 0x55	; 85
+ 6de:	f0 e0       	ldi	r31, 0x00	; 0
+ 6e0:	80 81       	ld	r24, Z
+ 6e2:	82 60       	ori	r24, 0x02	; 2
+ 6e4:	8c 93       	st	X, r24
+ 6e6:	06 c0       	rjmp	.+12     	; 0x6f4 <__INT0_init+0xe4>
+            break;
+
+            case RISING_EDGE:
+                MCUCR |= (1<<ISC00) & (1<<ISC01);
+ 6e8:	e5 e5       	ldi	r30, 0x55	; 85
+ 6ea:	f0 e0       	ldi	r31, 0x00	; 0
+ 6ec:	a5 e5       	ldi	r26, 0x55	; 85
+ 6ee:	b0 e0       	ldi	r27, 0x00	; 0
+ 6f0:	8c 91       	ld	r24, X
+ 6f2:	80 83       	st	Z, r24
+            break;
+
+            default:break;
+        }
+        /*Enable Global Interrupt Flag back*/
+        EN_GLOBAL_INTERRUPT;
+ 6f4:	af e5       	ldi	r26, 0x5F	; 95
+ 6f6:	b0 e0       	ldi	r27, 0x00	; 0
+ 6f8:	ef e5       	ldi	r30, 0x5F	; 95
+ 6fa:	f0 e0       	ldi	r31, 0x00	; 0
+ 6fc:	80 81       	ld	r24, Z
+ 6fe:	80 68       	ori	r24, 0x80	; 128
+ 700:	8c 93       	st	X, r24
+    }
+ 702:	0f 90       	pop	r0
+ 704:	0f 90       	pop	r0
+ 706:	0f 90       	pop	r0
+ 708:	0f 90       	pop	r0
+ 70a:	cf 91       	pop	r28
+ 70c:	df 91       	pop	r29
+ 70e:	08 95       	ret
+
+00000710 <__vector_2>:
+#ifdef _INT1
+
+    /*** ISR Description:-
+     * ISR Call the global pointer to function to execute desired code */
+    ISR(INT1_vect)
+    {
+ 710:	1f 92       	push	r1
+ 712:	0f 92       	push	r0
+ 714:	0f b6       	in	r0, 0x3f	; 63
+ 716:	0f 92       	push	r0
+ 718:	11 24       	eor	r1, r1
+ 71a:	2f 93       	push	r18
+ 71c:	3f 93       	push	r19
+ 71e:	4f 93       	push	r20
+ 720:	5f 93       	push	r21
+ 722:	6f 93       	push	r22
+ 724:	7f 93       	push	r23
+ 726:	8f 93       	push	r24
+ 728:	9f 93       	push	r25
+ 72a:	af 93       	push	r26
+ 72c:	bf 93       	push	r27
+ 72e:	ef 93       	push	r30
+ 730:	ff 93       	push	r31
+ 732:	df 93       	push	r29
+ 734:	cf 93       	push	r28
+ 736:	cd b7       	in	r28, 0x3d	; 61
+ 738:	de b7       	in	r29, 0x3e	; 62
+        (*g_INT1_callBack_ptr)();
+ 73a:	e0 91 7c 00 	lds	r30, 0x007C
+ 73e:	f0 91 7d 00 	lds	r31, 0x007D
+ 742:	09 95       	icall
+    }
+ 744:	cf 91       	pop	r28
+ 746:	df 91       	pop	r29
+ 748:	ff 91       	pop	r31
+ 74a:	ef 91       	pop	r30
+ 74c:	bf 91       	pop	r27
+ 74e:	af 91       	pop	r26
+ 750:	9f 91       	pop	r25
+ 752:	8f 91       	pop	r24
+ 754:	7f 91       	pop	r23
+ 756:	6f 91       	pop	r22
+ 758:	5f 91       	pop	r21
+ 75a:	4f 91       	pop	r20
+ 75c:	3f 91       	pop	r19
+ 75e:	2f 91       	pop	r18
+ 760:	0f 90       	pop	r0
+ 762:	0f be       	out	0x3f, r0	; 63
+ 764:	0f 90       	pop	r0
+ 766:	1f 90       	pop	r1
+ 768:	18 95       	reti
+
+0000076a <__INT1_setISRCallBackFuncPointer>:
+
+    /*** Description:-
+     * Function used to set the Global Pointer called by ISR,
+     * with the Developer created function */
+    void __INT1_setISRCallBackFuncPointer(void (*ptr_to_func)(void))
+    {
+ 76a:	df 93       	push	r29
+ 76c:	cf 93       	push	r28
+ 76e:	00 d0       	rcall	.+0      	; 0x770 <__INT1_setISRCallBackFuncPointer+0x6>
+ 770:	cd b7       	in	r28, 0x3d	; 61
+ 772:	de b7       	in	r29, 0x3e	; 62
+ 774:	9a 83       	std	Y+2, r25	; 0x02
+ 776:	89 83       	std	Y+1, r24	; 0x01
+        g_INT1_callBack_ptr = ptr_to_func;
+ 778:	89 81       	ldd	r24, Y+1	; 0x01
+ 77a:	9a 81       	ldd	r25, Y+2	; 0x02
+ 77c:	90 93 7d 00 	sts	0x007D, r25
+ 780:	80 93 7c 00 	sts	0x007C, r24
+    }
+ 784:	0f 90       	pop	r0
+ 786:	0f 90       	pop	r0
+ 788:	cf 91       	pop	r28
+ 78a:	df 91       	pop	r29
+ 78c:	08 95       	ret
+
+0000078e <__INT1_init>:
+    /*** Description:-
+     * Function To enable EXT Interrupt 0, Fu Args: "sense_control"
+     * sense_control Values = LOW_LOGIC /  LOGIC_CHANGE / FALLING_EDGE / RISING_EDGE
+     * pullupResistor = EN_PULLUP / DIS_PULLUP */
+    void __INT1_init(uint8 sense_control, uint8 pullupResistor)
+    {
+ 78e:	df 93       	push	r29
+ 790:	cf 93       	push	r28
+ 792:	00 d0       	rcall	.+0      	; 0x794 <__INT1_init+0x6>
+ 794:	00 d0       	rcall	.+0      	; 0x796 <__INT1_init+0x8>
+ 796:	cd b7       	in	r28, 0x3d	; 61
+ 798:	de b7       	in	r29, 0x3e	; 62
+ 79a:	89 83       	std	Y+1, r24	; 0x01
+ 79c:	6a 83       	std	Y+2, r22	; 0x02
+        /*Disable Global Interrupt Flag; Critical Section*/
+        DIS_GLOBAL_INTERRUPT;
+ 79e:	af e5       	ldi	r26, 0x5F	; 95
+ 7a0:	b0 e0       	ldi	r27, 0x00	; 0
+ 7a2:	ef e5       	ldi	r30, 0x5F	; 95
+ 7a4:	f0 e0       	ldi	r31, 0x00	; 0
+ 7a6:	80 81       	ld	r24, Z
+ 7a8:	8f 77       	andi	r24, 0x7F	; 127
+ 7aa:	8c 93       	st	X, r24
+        /*Configure INT1/PD3 as input pin*/
+        DDRD  &= (~(1<<PD3));
+ 7ac:	a1 e3       	ldi	r26, 0x31	; 49
+ 7ae:	b0 e0       	ldi	r27, 0x00	; 0
+ 7b0:	e1 e3       	ldi	r30, 0x31	; 49
+ 7b2:	f0 e0       	ldi	r31, 0x00	; 0
+ 7b4:	80 81       	ld	r24, Z
+ 7b6:	87 7f       	andi	r24, 0xF7	; 247
+ 7b8:	8c 93       	st	X, r24
+        if(pullupResistor)
+ 7ba:	8a 81       	ldd	r24, Y+2	; 0x02
+ 7bc:	88 23       	and	r24, r24
+ 7be:	39 f0       	breq	.+14     	; 0x7ce <__INT1_init+0x40>
+        {
+        	PORTD |= (1<<PD3);
+ 7c0:	a2 e3       	ldi	r26, 0x32	; 50
+ 7c2:	b0 e0       	ldi	r27, 0x00	; 0
+ 7c4:	e2 e3       	ldi	r30, 0x32	; 50
+ 7c6:	f0 e0       	ldi	r31, 0x00	; 0
+ 7c8:	80 81       	ld	r24, Z
+ 7ca:	88 60       	ori	r24, 0x08	; 8
+ 7cc:	8c 93       	st	X, r24
+        }
+        /*write ISC10 and ISC11 bits according to sense control value*/
+        switch(sense_control)
+ 7ce:	89 81       	ldd	r24, Y+1	; 0x01
+ 7d0:	28 2f       	mov	r18, r24
+ 7d2:	30 e0       	ldi	r19, 0x00	; 0
+ 7d4:	3c 83       	std	Y+4, r19	; 0x04
+ 7d6:	2b 83       	std	Y+3, r18	; 0x03
+ 7d8:	8b 81       	ldd	r24, Y+3	; 0x03
+ 7da:	9c 81       	ldd	r25, Y+4	; 0x04
+ 7dc:	81 30       	cpi	r24, 0x01	; 1
+ 7de:	91 05       	cpc	r25, r1
+ 7e0:	e9 f0       	breq	.+58     	; 0x81c <__INT1_init+0x8e>
+ 7e2:	2b 81       	ldd	r18, Y+3	; 0x03
+ 7e4:	3c 81       	ldd	r19, Y+4	; 0x04
+ 7e6:	22 30       	cpi	r18, 0x02	; 2
+ 7e8:	31 05       	cpc	r19, r1
+ 7ea:	2c f4       	brge	.+10     	; 0x7f6 <__INT1_init+0x68>
+ 7ec:	8b 81       	ldd	r24, Y+3	; 0x03
+ 7ee:	9c 81       	ldd	r25, Y+4	; 0x04
+ 7f0:	00 97       	sbiw	r24, 0x00	; 0
+ 7f2:	61 f0       	breq	.+24     	; 0x80c <__INT1_init+0x7e>
+ 7f4:	37 c0       	rjmp	.+110    	; 0x864 <__INT1_init+0xd6>
+ 7f6:	2b 81       	ldd	r18, Y+3	; 0x03
+ 7f8:	3c 81       	ldd	r19, Y+4	; 0x04
+ 7fa:	22 30       	cpi	r18, 0x02	; 2
+ 7fc:	31 05       	cpc	r19, r1
+ 7fe:	e9 f0       	breq	.+58     	; 0x83a <__INT1_init+0xac>
+ 800:	8b 81       	ldd	r24, Y+3	; 0x03
+ 802:	9c 81       	ldd	r25, Y+4	; 0x04
+ 804:	83 30       	cpi	r24, 0x03	; 3
+ 806:	91 05       	cpc	r25, r1
+ 808:	39 f1       	breq	.+78     	; 0x858 <__INT1_init+0xca>
+ 80a:	2c c0       	rjmp	.+88     	; 0x864 <__INT1_init+0xd6>
+        {
+            case LOW_LOGIC:
+                MCUCR &= (~(1<<ISC10)) & (~(1<<ISC11));
+ 80c:	a5 e5       	ldi	r26, 0x55	; 85
+ 80e:	b0 e0       	ldi	r27, 0x00	; 0
+ 810:	e5 e5       	ldi	r30, 0x55	; 85
+ 812:	f0 e0       	ldi	r31, 0x00	; 0
+ 814:	80 81       	ld	r24, Z
+ 816:	83 7f       	andi	r24, 0xF3	; 243
+ 818:	8c 93       	st	X, r24
+ 81a:	24 c0       	rjmp	.+72     	; 0x864 <__INT1_init+0xd6>
+            break;
+
+            case LOGIC_CHANGE:
+                MCUCR |= (1<<ISC10);
+ 81c:	a5 e5       	ldi	r26, 0x55	; 85
+ 81e:	b0 e0       	ldi	r27, 0x00	; 0
+ 820:	e5 e5       	ldi	r30, 0x55	; 85
+ 822:	f0 e0       	ldi	r31, 0x00	; 0
+ 824:	80 81       	ld	r24, Z
+ 826:	84 60       	ori	r24, 0x04	; 4
+ 828:	8c 93       	st	X, r24
+                MCUCR &= (~(1<<ISC11));
+ 82a:	a5 e5       	ldi	r26, 0x55	; 85
+ 82c:	b0 e0       	ldi	r27, 0x00	; 0
+ 82e:	e5 e5       	ldi	r30, 0x55	; 85
+ 830:	f0 e0       	ldi	r31, 0x00	; 0
+ 832:	80 81       	ld	r24, Z
+ 834:	87 7f       	andi	r24, 0xF7	; 247
+ 836:	8c 93       	st	X, r24
+ 838:	15 c0       	rjmp	.+42     	; 0x864 <__INT1_init+0xd6>
+            break;
+
+            case FALLING_EDGE:
+                MCUCR &= (~(1<<ISC10));
+ 83a:	a5 e5       	ldi	r26, 0x55	; 85
+ 83c:	b0 e0       	ldi	r27, 0x00	; 0
+ 83e:	e5 e5       	ldi	r30, 0x55	; 85
+ 840:	f0 e0       	ldi	r31, 0x00	; 0
+ 842:	80 81       	ld	r24, Z
+ 844:	8b 7f       	andi	r24, 0xFB	; 251
+ 846:	8c 93       	st	X, r24
+                MCUCR |= (1<<ISC11);
+ 848:	a5 e5       	ldi	r26, 0x55	; 85
+ 84a:	b0 e0       	ldi	r27, 0x00	; 0
+ 84c:	e5 e5       	ldi	r30, 0x55	; 85
+ 84e:	f0 e0       	ldi	r31, 0x00	; 0
+ 850:	80 81       	ld	r24, Z
+ 852:	88 60       	ori	r24, 0x08	; 8
+ 854:	8c 93       	st	X, r24
+ 856:	06 c0       	rjmp	.+12     	; 0x864 <__INT1_init+0xd6>
+            break;
+
+            case RISING_EDGE:
+                MCUCR |= (1<<ISC10) & (1<<ISC11);
+ 858:	e5 e5       	ldi	r30, 0x55	; 85
+ 85a:	f0 e0       	ldi	r31, 0x00	; 0
+ 85c:	a5 e5       	ldi	r26, 0x55	; 85
+ 85e:	b0 e0       	ldi	r27, 0x00	; 0
+ 860:	8c 91       	ld	r24, X
+ 862:	80 83       	st	Z, r24
+            break;
+
+            default:break;
+        }
+        /*Enable (INT1) Module Interrupt flag*/
+        GICR |= (1<<INT1);
+ 864:	ab e5       	ldi	r26, 0x5B	; 91
+ 866:	b0 e0       	ldi	r27, 0x00	; 0
+ 868:	eb e5       	ldi	r30, 0x5B	; 91
+ 86a:	f0 e0       	ldi	r31, 0x00	; 0
+ 86c:	80 81       	ld	r24, Z
+ 86e:	80 68       	ori	r24, 0x80	; 128
+ 870:	8c 93       	st	X, r24
+        /*Enable Global Interrupt Flag back*/
+        EN_GLOBAL_INTERRUPT;
+ 872:	af e5       	ldi	r26, 0x5F	; 95
+ 874:	b0 e0       	ldi	r27, 0x00	; 0
+ 876:	ef e5       	ldi	r30, 0x5F	; 95
+ 878:	f0 e0       	ldi	r31, 0x00	; 0
+ 87a:	80 81       	ld	r24, Z
+ 87c:	80 68       	ori	r24, 0x80	; 128
+ 87e:	8c 93       	st	X, r24
+    }
+ 880:	0f 90       	pop	r0
+ 882:	0f 90       	pop	r0
+ 884:	0f 90       	pop	r0
+ 886:	0f 90       	pop	r0
+ 888:	cf 91       	pop	r28
+ 88a:	df 91       	pop	r29
+ 88c:	08 95       	ret
+
+0000088e <__vector_18>:
+#ifdef _INT2
+
+    /*** ISR Description:-
+     * ISR Call the global pointer to function to execute desired code */
+    ISR(INT2_vect)
+    {
+ 88e:	1f 92       	push	r1
+ 890:	0f 92       	push	r0
+ 892:	0f b6       	in	r0, 0x3f	; 63
+ 894:	0f 92       	push	r0
+ 896:	11 24       	eor	r1, r1
+ 898:	2f 93       	push	r18
+ 89a:	3f 93       	push	r19
+ 89c:	4f 93       	push	r20
+ 89e:	5f 93       	push	r21
+ 8a0:	6f 93       	push	r22
+ 8a2:	7f 93       	push	r23
+ 8a4:	8f 93       	push	r24
+ 8a6:	9f 93       	push	r25
+ 8a8:	af 93       	push	r26
+ 8aa:	bf 93       	push	r27
+ 8ac:	ef 93       	push	r30
+ 8ae:	ff 93       	push	r31
+ 8b0:	df 93       	push	r29
+ 8b2:	cf 93       	push	r28
+ 8b4:	cd b7       	in	r28, 0x3d	; 61
+ 8b6:	de b7       	in	r29, 0x3e	; 62
+        (*g_INT2_callBack_ptr)();
+ 8b8:	e0 91 7e 00 	lds	r30, 0x007E
+ 8bc:	f0 91 7f 00 	lds	r31, 0x007F
+ 8c0:	09 95       	icall
+    }
+ 8c2:	cf 91       	pop	r28
+ 8c4:	df 91       	pop	r29
+ 8c6:	ff 91       	pop	r31
+ 8c8:	ef 91       	pop	r30
+ 8ca:	bf 91       	pop	r27
+ 8cc:	af 91       	pop	r26
+ 8ce:	9f 91       	pop	r25
+ 8d0:	8f 91       	pop	r24
+ 8d2:	7f 91       	pop	r23
+ 8d4:	6f 91       	pop	r22
+ 8d6:	5f 91       	pop	r21
+ 8d8:	4f 91       	pop	r20
+ 8da:	3f 91       	pop	r19
+ 8dc:	2f 91       	pop	r18
+ 8de:	0f 90       	pop	r0
+ 8e0:	0f be       	out	0x3f, r0	; 63
+ 8e2:	0f 90       	pop	r0
+ 8e4:	1f 90       	pop	r1
+ 8e6:	18 95       	reti
+
+000008e8 <__INT2_setISRCallBackFuncPointer>:
+
+    /*** Description:-
+     * Function used to set the Global Pointer called by ISR,
+     * with the Developer created function */
+    void __INT2_setISRCallBackFuncPointer(void (*ptr_to_func)(void))
+    {
+ 8e8:	df 93       	push	r29
+ 8ea:	cf 93       	push	r28
+ 8ec:	00 d0       	rcall	.+0      	; 0x8ee <__INT2_setISRCallBackFuncPointer+0x6>
+ 8ee:	cd b7       	in	r28, 0x3d	; 61
+ 8f0:	de b7       	in	r29, 0x3e	; 62
+ 8f2:	9a 83       	std	Y+2, r25	; 0x02
+ 8f4:	89 83       	std	Y+1, r24	; 0x01
+        g_INT2_callBack_ptr = ptr_to_func;
+ 8f6:	89 81       	ldd	r24, Y+1	; 0x01
+ 8f8:	9a 81       	ldd	r25, Y+2	; 0x02
+ 8fa:	90 93 7f 00 	sts	0x007F, r25
+ 8fe:	80 93 7e 00 	sts	0x007E, r24
+    }
+ 902:	0f 90       	pop	r0
+ 904:	0f 90       	pop	r0
+ 906:	cf 91       	pop	r28
+ 908:	df 91       	pop	r29
+ 90a:	08 95       	ret
+
+0000090c <__INT2_init>:
+    /*** Description:-
+     * Function To enable EXT Interrupt 0, Fu Args: "sense_control"
+     * sense_control Values = LOW_LOGIC /  LOGIC_CHANGE / FALLING_EDGE / RISING_EDGE
+     * pullupResistor = EN_PULLUP / DIS_PULLUP */
+    void __INT2_init(uint8 sense_control, uint8 pullupResistor)
+    {
+ 90c:	df 93       	push	r29
+ 90e:	cf 93       	push	r28
+ 910:	00 d0       	rcall	.+0      	; 0x912 <__INT2_init+0x6>
+ 912:	00 d0       	rcall	.+0      	; 0x914 <__INT2_init+0x8>
+ 914:	cd b7       	in	r28, 0x3d	; 61
+ 916:	de b7       	in	r29, 0x3e	; 62
+ 918:	89 83       	std	Y+1, r24	; 0x01
+ 91a:	6a 83       	std	Y+2, r22	; 0x02
+        /*Disable Global Interrupt Flag; Critical Section*/
+        DIS_GLOBAL_INTERRUPT;
+ 91c:	af e5       	ldi	r26, 0x5F	; 95
+ 91e:	b0 e0       	ldi	r27, 0x00	; 0
+ 920:	ef e5       	ldi	r30, 0x5F	; 95
+ 922:	f0 e0       	ldi	r31, 0x00	; 0
+ 924:	80 81       	ld	r24, Z
+ 926:	8f 77       	andi	r24, 0x7F	; 127
+ 928:	8c 93       	st	X, r24
+        /*Configure INT2/PB2 as input pin*/
+        DDRB  &= (~(1<<PB2));
+ 92a:	a7 e3       	ldi	r26, 0x37	; 55
+ 92c:	b0 e0       	ldi	r27, 0x00	; 0
+ 92e:	e7 e3       	ldi	r30, 0x37	; 55
+ 930:	f0 e0       	ldi	r31, 0x00	; 0
+ 932:	80 81       	ld	r24, Z
+ 934:	8b 7f       	andi	r24, 0xFB	; 251
+ 936:	8c 93       	st	X, r24
+        if(pullupResistor)
+ 938:	8a 81       	ldd	r24, Y+2	; 0x02
+ 93a:	88 23       	and	r24, r24
+ 93c:	39 f0       	breq	.+14     	; 0x94c <__INT2_init+0x40>
+        {
+        	PORTB |= (1<<PB2);
+ 93e:	a8 e3       	ldi	r26, 0x38	; 56
+ 940:	b0 e0       	ldi	r27, 0x00	; 0
+ 942:	e8 e3       	ldi	r30, 0x38	; 56
+ 944:	f0 e0       	ldi	r31, 0x00	; 0
+ 946:	80 81       	ld	r24, Z
+ 948:	84 60       	ori	r24, 0x04	; 4
+ 94a:	8c 93       	st	X, r24
+        }
+        /*write ISC2 bits according to sense control value*/
+        switch(sense_control)
+ 94c:	89 81       	ldd	r24, Y+1	; 0x01
+ 94e:	28 2f       	mov	r18, r24
+ 950:	30 e0       	ldi	r19, 0x00	; 0
+ 952:	3c 83       	std	Y+4, r19	; 0x04
+ 954:	2b 83       	std	Y+3, r18	; 0x03
+ 956:	8b 81       	ldd	r24, Y+3	; 0x03
+ 958:	9c 81       	ldd	r25, Y+4	; 0x04
+ 95a:	82 30       	cpi	r24, 0x02	; 2
+ 95c:	91 05       	cpc	r25, r1
+ 95e:	31 f0       	breq	.+12     	; 0x96c <__INT2_init+0x60>
+ 960:	2b 81       	ldd	r18, Y+3	; 0x03
+ 962:	3c 81       	ldd	r19, Y+4	; 0x04
+ 964:	23 30       	cpi	r18, 0x03	; 3
+ 966:	31 05       	cpc	r19, r1
+ 968:	49 f0       	breq	.+18     	; 0x97c <__INT2_init+0x70>
+ 96a:	0f c0       	rjmp	.+30     	; 0x98a <__INT2_init+0x7e>
+        {
+            case FALLING_EDGE:
+                MCUCSR &= (~(1<<ISC2));
+ 96c:	a4 e5       	ldi	r26, 0x54	; 84
+ 96e:	b0 e0       	ldi	r27, 0x00	; 0
+ 970:	e4 e5       	ldi	r30, 0x54	; 84
+ 972:	f0 e0       	ldi	r31, 0x00	; 0
+ 974:	80 81       	ld	r24, Z
+ 976:	8f 7b       	andi	r24, 0xBF	; 191
+ 978:	8c 93       	st	X, r24
+ 97a:	07 c0       	rjmp	.+14     	; 0x98a <__INT2_init+0x7e>
+            break;
+
+            case RISING_EDGE:
+                MCUCSR |= (1<<ISC2);
+ 97c:	a4 e5       	ldi	r26, 0x54	; 84
+ 97e:	b0 e0       	ldi	r27, 0x00	; 0
+ 980:	e4 e5       	ldi	r30, 0x54	; 84
+ 982:	f0 e0       	ldi	r31, 0x00	; 0
+ 984:	80 81       	ld	r24, Z
+ 986:	80 64       	ori	r24, 0x40	; 64
+ 988:	8c 93       	st	X, r24
+            break;
+
+            default:break;
+        }
+        /*Enable (INT2) Module Interrupt flag*/
+        GICR |= (1<<INT2);
+ 98a:	ab e5       	ldi	r26, 0x5B	; 91
+ 98c:	b0 e0       	ldi	r27, 0x00	; 0
+ 98e:	eb e5       	ldi	r30, 0x5B	; 91
+ 990:	f0 e0       	ldi	r31, 0x00	; 0
+ 992:	80 81       	ld	r24, Z
+ 994:	80 62       	ori	r24, 0x20	; 32
+ 996:	8c 93       	st	X, r24
+        /*Enable Global Interrupt Flag back*/
+        EN_GLOBAL_INTERRUPT;
+ 998:	af e5       	ldi	r26, 0x5F	; 95
+ 99a:	b0 e0       	ldi	r27, 0x00	; 0
+ 99c:	ef e5       	ldi	r30, 0x5F	; 95
+ 99e:	f0 e0       	ldi	r31, 0x00	; 0
+ 9a0:	80 81       	ld	r24, Z
+ 9a2:	80 68       	ori	r24, 0x80	; 128
+ 9a4:	8c 93       	st	X, r24
+    }
+ 9a6:	0f 90       	pop	r0
+ 9a8:	0f 90       	pop	r0
+ 9aa:	0f 90       	pop	r0
+ 9ac:	0f 90       	pop	r0
+ 9ae:	cf 91       	pop	r28
+ 9b0:	df 91       	pop	r29
+ 9b2:	08 95       	ret
+
+000009b4 <__vector_19>:
+#if(TIMER_OCx_PIN == DISABLED)
+
+    /*** ISR Description:-
+     * When Interrupt occurs the Global pointer will call the user-defined function */
+    ISR(TIMER0_COMP_vect)
+    {
+ 9b4:	1f 92       	push	r1
+ 9b6:	0f 92       	push	r0
+ 9b8:	0f b6       	in	r0, 0x3f	; 63
+ 9ba:	0f 92       	push	r0
+ 9bc:	11 24       	eor	r1, r1
+ 9be:	2f 93       	push	r18
+ 9c0:	3f 93       	push	r19
+ 9c2:	4f 93       	push	r20
+ 9c4:	5f 93       	push	r21
+ 9c6:	6f 93       	push	r22
+ 9c8:	7f 93       	push	r23
+ 9ca:	8f 93       	push	r24
+ 9cc:	9f 93       	push	r25
+ 9ce:	af 93       	push	r26
+ 9d0:	bf 93       	push	r27
+ 9d2:	ef 93       	push	r30
+ 9d4:	ff 93       	push	r31
+ 9d6:	df 93       	push	r29
+ 9d8:	cf 93       	push	r28
+ 9da:	cd b7       	in	r28, 0x3d	; 61
+ 9dc:	de b7       	in	r29, 0x3e	; 62
+        (*g_TIMER0_callBack_ptr)();
+ 9de:	e0 91 80 00 	lds	r30, 0x0080
+ 9e2:	f0 91 81 00 	lds	r31, 0x0081
+ 9e6:	09 95       	icall
+    }
+ 9e8:	cf 91       	pop	r28
+ 9ea:	df 91       	pop	r29
+ 9ec:	ff 91       	pop	r31
+ 9ee:	ef 91       	pop	r30
+ 9f0:	bf 91       	pop	r27
+ 9f2:	af 91       	pop	r26
+ 9f4:	9f 91       	pop	r25
+ 9f6:	8f 91       	pop	r24
+ 9f8:	7f 91       	pop	r23
+ 9fa:	6f 91       	pop	r22
+ 9fc:	5f 91       	pop	r21
+ 9fe:	4f 91       	pop	r20
+ a00:	3f 91       	pop	r19
+ a02:	2f 91       	pop	r18
+ a04:	0f 90       	pop	r0
+ a06:	0f be       	out	0x3f, r0	; 63
+ a08:	0f 90       	pop	r0
+ a0a:	1f 90       	pop	r1
+ a0c:	18 95       	reti
+
+00000a0e <__vector_6>:
+
+    /*** ISR Description:-
+     * When Interrupt occurs the Global pointer will call the user-defined function */
+    ISR(TIMER1_COMPA_vect)
+    {
+ a0e:	1f 92       	push	r1
+ a10:	0f 92       	push	r0
+ a12:	0f b6       	in	r0, 0x3f	; 63
+ a14:	0f 92       	push	r0
+ a16:	11 24       	eor	r1, r1
+ a18:	2f 93       	push	r18
+ a1a:	3f 93       	push	r19
+ a1c:	4f 93       	push	r20
+ a1e:	5f 93       	push	r21
+ a20:	6f 93       	push	r22
+ a22:	7f 93       	push	r23
+ a24:	8f 93       	push	r24
+ a26:	9f 93       	push	r25
+ a28:	af 93       	push	r26
+ a2a:	bf 93       	push	r27
+ a2c:	ef 93       	push	r30
+ a2e:	ff 93       	push	r31
+ a30:	df 93       	push	r29
+ a32:	cf 93       	push	r28
+ a34:	cd b7       	in	r28, 0x3d	; 61
+ a36:	de b7       	in	r29, 0x3e	; 62
+        (*g_TIMER1_callBack_ptr)();
+ a38:	e0 91 82 00 	lds	r30, 0x0082
+ a3c:	f0 91 83 00 	lds	r31, 0x0083
+ a40:	09 95       	icall
+    }
+ a42:	cf 91       	pop	r28
+ a44:	df 91       	pop	r29
+ a46:	ff 91       	pop	r31
+ a48:	ef 91       	pop	r30
+ a4a:	bf 91       	pop	r27
+ a4c:	af 91       	pop	r26
+ a4e:	9f 91       	pop	r25
+ a50:	8f 91       	pop	r24
+ a52:	7f 91       	pop	r23
+ a54:	6f 91       	pop	r22
+ a56:	5f 91       	pop	r21
+ a58:	4f 91       	pop	r20
+ a5a:	3f 91       	pop	r19
+ a5c:	2f 91       	pop	r18
+ a5e:	0f 90       	pop	r0
+ a60:	0f be       	out	0x3f, r0	; 63
+ a62:	0f 90       	pop	r0
+ a64:	1f 90       	pop	r1
+ a66:	18 95       	reti
+
+00000a68 <__TIMER_CTC_setISRCallBackFuncPointer>:
+
+    /*** Description:-
+     * Used to Set the Global Pointer with desired function which will be called by ISR 
+     * Func Arg: Pass the desired function Name */
+    void __TIMER_CTC_setISRCallBackFuncPointer(uint8 timer_module, void (*ptr_to_func)(void))
+    {
+ a68:	df 93       	push	r29
+ a6a:	cf 93       	push	r28
+ a6c:	00 d0       	rcall	.+0      	; 0xa6e <__TIMER_CTC_setISRCallBackFuncPointer+0x6>
+ a6e:	00 d0       	rcall	.+0      	; 0xa70 <__TIMER_CTC_setISRCallBackFuncPointer+0x8>
+ a70:	0f 92       	push	r0
+ a72:	cd b7       	in	r28, 0x3d	; 61
+ a74:	de b7       	in	r29, 0x3e	; 62
+ a76:	89 83       	std	Y+1, r24	; 0x01
+ a78:	7b 83       	std	Y+3, r23	; 0x03
+ a7a:	6a 83       	std	Y+2, r22	; 0x02
+        switch(timer_module)
+ a7c:	89 81       	ldd	r24, Y+1	; 0x01
+ a7e:	28 2f       	mov	r18, r24
+ a80:	30 e0       	ldi	r19, 0x00	; 0
+ a82:	3d 83       	std	Y+5, r19	; 0x05
+ a84:	2c 83       	std	Y+4, r18	; 0x04
+ a86:	8c 81       	ldd	r24, Y+4	; 0x04
+ a88:	9d 81       	ldd	r25, Y+5	; 0x05
+ a8a:	00 97       	sbiw	r24, 0x00	; 0
+ a8c:	31 f0       	breq	.+12     	; 0xa9a <__TIMER_CTC_setISRCallBackFuncPointer+0x32>
+ a8e:	2c 81       	ldd	r18, Y+4	; 0x04
+ a90:	3d 81       	ldd	r19, Y+5	; 0x05
+ a92:	21 30       	cpi	r18, 0x01	; 1
+ a94:	31 05       	cpc	r19, r1
+ a96:	41 f0       	breq	.+16     	; 0xaa8 <__TIMER_CTC_setISRCallBackFuncPointer+0x40>
+ a98:	0d c0       	rjmp	.+26     	; 0xab4 <__TIMER_CTC_setISRCallBackFuncPointer+0x4c>
+        {
+            case TIMER0:
+                g_TIMER0_callBack_ptr = ptr_to_func;
+ a9a:	8a 81       	ldd	r24, Y+2	; 0x02
+ a9c:	9b 81       	ldd	r25, Y+3	; 0x03
+ a9e:	90 93 81 00 	sts	0x0081, r25
+ aa2:	80 93 80 00 	sts	0x0080, r24
+ aa6:	06 c0       	rjmp	.+12     	; 0xab4 <__TIMER_CTC_setISRCallBackFuncPointer+0x4c>
+            break;
+
+            case TIMER1:
+                g_TIMER1_callBack_ptr = ptr_to_func;
+ aa8:	8a 81       	ldd	r24, Y+2	; 0x02
+ aaa:	9b 81       	ldd	r25, Y+3	; 0x03
+ aac:	90 93 83 00 	sts	0x0083, r25
+ ab0:	80 93 82 00 	sts	0x0082, r24
+            break;
+
+            case TIMER2:break;
+            default:break;
+        }
+    }
+ ab4:	0f 90       	pop	r0
+ ab6:	0f 90       	pop	r0
+ ab8:	0f 90       	pop	r0
+ aba:	0f 90       	pop	r0
+ abc:	0f 90       	pop	r0
+ abe:	cf 91       	pop	r28
+ ac0:	df 91       	pop	r29
+ ac2:	08 95       	ret
+
+00000ac4 <__TIMER_CTC_startTimer>:
+
+/*** Description:-
+ * Used to Start the Timer with the desired Configuration
+ * Func Args, struct Members: timer_clock / compare_value / OC0_mode */
+void __TIMER_CTC_startTimer(const configType_TIMER *t_configPointer)
+{
+ ac4:	df 93       	push	r29
+ ac6:	cf 93       	push	r28
+ ac8:	00 d0       	rcall	.+0      	; 0xaca <__TIMER_CTC_startTimer+0x6>
+ aca:	00 d0       	rcall	.+0      	; 0xacc <__TIMER_CTC_startTimer+0x8>
+ acc:	cd b7       	in	r28, 0x3d	; 61
+ ace:	de b7       	in	r29, 0x3e	; 62
+ ad0:	9a 83       	std	Y+2, r25	; 0x02
+ ad2:	89 83       	std	Y+1, r24	; 0x01
+    switch(t_configPointer->timer_module)
+ ad4:	e9 81       	ldd	r30, Y+1	; 0x01
+ ad6:	fa 81       	ldd	r31, Y+2	; 0x02
+ ad8:	80 81       	ld	r24, Z
+ ada:	28 2f       	mov	r18, r24
+ adc:	30 e0       	ldi	r19, 0x00	; 0
+ ade:	3c 83       	std	Y+4, r19	; 0x04
+ ae0:	2b 83       	std	Y+3, r18	; 0x03
+ ae2:	8b 81       	ldd	r24, Y+3	; 0x03
+ ae4:	9c 81       	ldd	r25, Y+4	; 0x04
+ ae6:	00 97       	sbiw	r24, 0x00	; 0
+ ae8:	39 f0       	breq	.+14     	; 0xaf8 <__TIMER_CTC_startTimer+0x34>
+ aea:	2b 81       	ldd	r18, Y+3	; 0x03
+ aec:	3c 81       	ldd	r19, Y+4	; 0x04
+ aee:	21 30       	cpi	r18, 0x01	; 1
+ af0:	31 05       	cpc	r19, r1
+ af2:	09 f4       	brne	.+2      	; 0xaf6 <__TIMER_CTC_startTimer+0x32>
+ af4:	57 c0       	rjmp	.+174    	; 0xba4 <__TIMER_CTC_startTimer+0xe0>
+ af6:	bf c0       	rjmp	.+382    	; 0xc76 <__TIMER_CTC_startTimer+0x1b2>
+    {
+        case TIMER0:
+            /*Disable Global Interrupt flag; Entering Critical Section*/
+             DIS_GLOBAL_INTERRUPT;
+ af8:	af e5       	ldi	r26, 0x5F	; 95
+ afa:	b0 e0       	ldi	r27, 0x00	; 0
+ afc:	ef e5       	ldi	r30, 0x5F	; 95
+ afe:	f0 e0       	ldi	r31, 0x00	; 0
+ b00:	80 81       	ld	r24, Z
+ b02:	8f 77       	andi	r24, 0x7F	; 127
+ b04:	8c 93       	st	X, r24
+            /*Initialize the TCNT0 with 0 Value*/
+            TCNT0 = 0x00;
+ b06:	e2 e5       	ldi	r30, 0x52	; 82
+ b08:	f0 e0       	ldi	r31, 0x00	; 0
+ b0a:	10 82       	st	Z, r1
+            /*Set Compare Register with compare value*/
+            OCR0 = t_configPointer->compare_value;
+ b0c:	ac e5       	ldi	r26, 0x5C	; 92
+ b0e:	b0 e0       	ldi	r27, 0x00	; 0
+ b10:	e9 81       	ldd	r30, Y+1	; 0x01
+ b12:	fa 81       	ldd	r31, Y+2	; 0x02
+ b14:	82 81       	ldd	r24, Z+2	; 0x02
+ b16:	93 81       	ldd	r25, Z+3	; 0x03
+ b18:	8c 93       	st	X, r24
+            /*Set Timer in Non PWM Mode*/
+            SET_BIT(TCCR0, FOC0);
+ b1a:	a3 e5       	ldi	r26, 0x53	; 83
+ b1c:	b0 e0       	ldi	r27, 0x00	; 0
+ b1e:	e3 e5       	ldi	r30, 0x53	; 83
+ b20:	f0 e0       	ldi	r31, 0x00	; 0
+ b22:	80 81       	ld	r24, Z
+ b24:	80 68       	ori	r24, 0x80	; 128
+ b26:	8c 93       	st	X, r24
+            /*Set The timer in CTC Mode: WGM00=0 / WGM01 = 1*/
+            CLR_BIT(TCCR0, WGM00);
+ b28:	a3 e5       	ldi	r26, 0x53	; 83
+ b2a:	b0 e0       	ldi	r27, 0x00	; 0
+ b2c:	e3 e5       	ldi	r30, 0x53	; 83
+ b2e:	f0 e0       	ldi	r31, 0x00	; 0
+ b30:	80 81       	ld	r24, Z
+ b32:	8f 7b       	andi	r24, 0xBF	; 191
+ b34:	8c 93       	st	X, r24
+            SET_BIT(TCCR0, WGM01);
+ b36:	a3 e5       	ldi	r26, 0x53	; 83
+ b38:	b0 e0       	ldi	r27, 0x00	; 0
+ b3a:	e3 e5       	ldi	r30, 0x53	; 83
+ b3c:	f0 e0       	ldi	r31, 0x00	; 0
+ b3e:	80 81       	ld	r24, Z
+ b40:	88 60       	ori	r24, 0x08	; 8
+ b42:	8c 93       	st	X, r24
+            /*Enable Module Timer 0 Interrupt flag; if OC0 Pin is Disabled*/
+            #if(TIMER_OCx_PIN == DISABLED)
+                SET_BIT(TIMSK, OCIE0);
+ b44:	a9 e5       	ldi	r26, 0x59	; 89
+ b46:	b0 e0       	ldi	r27, 0x00	; 0
+ b48:	e9 e5       	ldi	r30, 0x59	; 89
+ b4a:	f0 e0       	ldi	r31, 0x00	; 0
+ b4c:	80 81       	ld	r24, Z
+ b4e:	82 60       	ori	r24, 0x02	; 2
+ b50:	8c 93       	st	X, r24
+                CLR_BIT(TIMSK, OCIE0);
+                /*Set OC0 as Output Pin*/
+                SET_BIT(DDRB, PB3);
+            #endif
+            /*Set Compare Output Mode, non-PWM Mode Pins*/
+            TCCR0 = (TCCR0&0b11001111) | (t_configPointer->OCx_mode<<4);
+ b52:	a3 e5       	ldi	r26, 0x53	; 83
+ b54:	b0 e0       	ldi	r27, 0x00	; 0
+ b56:	e3 e5       	ldi	r30, 0x53	; 83
+ b58:	f0 e0       	ldi	r31, 0x00	; 0
+ b5a:	80 81       	ld	r24, Z
+ b5c:	28 2f       	mov	r18, r24
+ b5e:	2f 7c       	andi	r18, 0xCF	; 207
+ b60:	e9 81       	ldd	r30, Y+1	; 0x01
+ b62:	fa 81       	ldd	r31, Y+2	; 0x02
+ b64:	84 81       	ldd	r24, Z+4	; 0x04
+ b66:	88 2f       	mov	r24, r24
+ b68:	90 e0       	ldi	r25, 0x00	; 0
+ b6a:	82 95       	swap	r24
+ b6c:	92 95       	swap	r25
+ b6e:	90 7f       	andi	r25, 0xF0	; 240
+ b70:	98 27       	eor	r25, r24
+ b72:	80 7f       	andi	r24, 0xF0	; 240
+ b74:	98 27       	eor	r25, r24
+ b76:	82 2b       	or	r24, r18
+ b78:	8c 93       	st	X, r24
+            /*Set the Timer Clock Prescaler*/
+            TCCR0 = (TCCR0&0xF8) | (t_configPointer->timer_clock&0x07);
+ b7a:	a3 e5       	ldi	r26, 0x53	; 83
+ b7c:	b0 e0       	ldi	r27, 0x00	; 0
+ b7e:	e3 e5       	ldi	r30, 0x53	; 83
+ b80:	f0 e0       	ldi	r31, 0x00	; 0
+ b82:	80 81       	ld	r24, Z
+ b84:	98 2f       	mov	r25, r24
+ b86:	98 7f       	andi	r25, 0xF8	; 248
+ b88:	e9 81       	ldd	r30, Y+1	; 0x01
+ b8a:	fa 81       	ldd	r31, Y+2	; 0x02
+ b8c:	81 81       	ldd	r24, Z+1	; 0x01
+ b8e:	87 70       	andi	r24, 0x07	; 7
+ b90:	89 2b       	or	r24, r25
+ b92:	8c 93       	st	X, r24
+            /*Enable Global Interrupt flag; Exiting Critical Section*/
+            EN_GLOBAL_INTERRUPT;
+ b94:	af e5       	ldi	r26, 0x5F	; 95
+ b96:	b0 e0       	ldi	r27, 0x00	; 0
+ b98:	ef e5       	ldi	r30, 0x5F	; 95
+ b9a:	f0 e0       	ldi	r31, 0x00	; 0
+ b9c:	80 81       	ld	r24, Z
+ b9e:	80 68       	ori	r24, 0x80	; 128
+ ba0:	8c 93       	st	X, r24
+ ba2:	69 c0       	rjmp	.+210    	; 0xc76 <__TIMER_CTC_startTimer+0x1b2>
+        break;
+
+        case TIMER1:
+            /*Disable Global Interrupt flag; Entering Critical Section*/
+            DIS_GLOBAL_INTERRUPT;
+ ba4:	af e5       	ldi	r26, 0x5F	; 95
+ ba6:	b0 e0       	ldi	r27, 0x00	; 0
+ ba8:	ef e5       	ldi	r30, 0x5F	; 95
+ baa:	f0 e0       	ldi	r31, 0x00	; 0
+ bac:	80 81       	ld	r24, Z
+ bae:	8f 77       	andi	r24, 0x7F	; 127
+ bb0:	8c 93       	st	X, r24
+            /*Initialize the TCNT0 with 0 Value*/
+            TCNT1 = 0x0000;
+ bb2:	ec e4       	ldi	r30, 0x4C	; 76
+ bb4:	f0 e0       	ldi	r31, 0x00	; 0
+ bb6:	11 82       	std	Z+1, r1	; 0x01
+ bb8:	10 82       	st	Z, r1
+            /*Set Compare Register with compare value*/
+            OCR1A = t_configPointer->compare_value;
+ bba:	aa e4       	ldi	r26, 0x4A	; 74
+ bbc:	b0 e0       	ldi	r27, 0x00	; 0
+ bbe:	e9 81       	ldd	r30, Y+1	; 0x01
+ bc0:	fa 81       	ldd	r31, Y+2	; 0x02
+ bc2:	82 81       	ldd	r24, Z+2	; 0x02
+ bc4:	93 81       	ldd	r25, Z+3	; 0x03
+ bc6:	11 96       	adiw	r26, 0x01	; 1
+ bc8:	9c 93       	st	X, r25
+ bca:	8e 93       	st	-X, r24
+            /*Set Timer in Non PWM Mode*/
+            SET_BIT(TCCR1A, FOC1A);
+ bcc:	af e4       	ldi	r26, 0x4F	; 79
+ bce:	b0 e0       	ldi	r27, 0x00	; 0
+ bd0:	ef e4       	ldi	r30, 0x4F	; 79
+ bd2:	f0 e0       	ldi	r31, 0x00	; 0
+ bd4:	80 81       	ld	r24, Z
+ bd6:	88 60       	ori	r24, 0x08	; 8
+ bd8:	8c 93       	st	X, r24
+            /*Set The timer in CTC Mode*/
+            CLR_BIT(TCCR1A, WGM10);
+ bda:	af e4       	ldi	r26, 0x4F	; 79
+ bdc:	b0 e0       	ldi	r27, 0x00	; 0
+ bde:	ef e4       	ldi	r30, 0x4F	; 79
+ be0:	f0 e0       	ldi	r31, 0x00	; 0
+ be2:	80 81       	ld	r24, Z
+ be4:	8e 7f       	andi	r24, 0xFE	; 254
+ be6:	8c 93       	st	X, r24
+            CLR_BIT(TCCR1A, WGM11);
+ be8:	af e4       	ldi	r26, 0x4F	; 79
+ bea:	b0 e0       	ldi	r27, 0x00	; 0
+ bec:	ef e4       	ldi	r30, 0x4F	; 79
+ bee:	f0 e0       	ldi	r31, 0x00	; 0
+ bf0:	80 81       	ld	r24, Z
+ bf2:	8d 7f       	andi	r24, 0xFD	; 253
+ bf4:	8c 93       	st	X, r24
+            SET_BIT(TCCR1B, WGM12);
+ bf6:	ae e4       	ldi	r26, 0x4E	; 78
+ bf8:	b0 e0       	ldi	r27, 0x00	; 0
+ bfa:	ee e4       	ldi	r30, 0x4E	; 78
+ bfc:	f0 e0       	ldi	r31, 0x00	; 0
+ bfe:	80 81       	ld	r24, Z
+ c00:	88 60       	ori	r24, 0x08	; 8
+ c02:	8c 93       	st	X, r24
+            CLR_BIT(TCCR1B, WGM13);
+ c04:	ae e4       	ldi	r26, 0x4E	; 78
+ c06:	b0 e0       	ldi	r27, 0x00	; 0
+ c08:	ee e4       	ldi	r30, 0x4E	; 78
+ c0a:	f0 e0       	ldi	r31, 0x00	; 0
+ c0c:	80 81       	ld	r24, Z
+ c0e:	8f 7e       	andi	r24, 0xEF	; 239
+ c10:	8c 93       	st	X, r24
+            /*Enable Module Timer 0 Interrupt flag; if OC0 Pin is Disabled*/
+            #if(TIMER_OCx_PIN == DISABLED)
+                /*Enable Interrupt Enable Module*/
+                SET_BIT(TIMSK, OCIE1A);
+ c12:	a9 e5       	ldi	r26, 0x59	; 89
+ c14:	b0 e0       	ldi	r27, 0x00	; 0
+ c16:	e9 e5       	ldi	r30, 0x59	; 89
+ c18:	f0 e0       	ldi	r31, 0x00	; 0
+ c1a:	80 81       	ld	r24, Z
+ c1c:	80 61       	ori	r24, 0x10	; 16
+ c1e:	8c 93       	st	X, r24
+                CLR_BIT(TIMSK, OCIE1A);
+                /*Set OC0 as Output Pin*/
+                SET_BIT(DDRD, PD5);
+            #endif
+            /*Set Compare Output Mode [non-PWM Mode] Pins*/
+            TCCR1A = (TCCR1A&0b00111111) | (t_configPointer->OCx_mode<<6);
+ c20:	af e4       	ldi	r26, 0x4F	; 79
+ c22:	b0 e0       	ldi	r27, 0x00	; 0
+ c24:	ef e4       	ldi	r30, 0x4F	; 79
+ c26:	f0 e0       	ldi	r31, 0x00	; 0
+ c28:	80 81       	ld	r24, Z
+ c2a:	28 2f       	mov	r18, r24
+ c2c:	2f 73       	andi	r18, 0x3F	; 63
+ c2e:	e9 81       	ldd	r30, Y+1	; 0x01
+ c30:	fa 81       	ldd	r31, Y+2	; 0x02
+ c32:	84 81       	ldd	r24, Z+4	; 0x04
+ c34:	88 2f       	mov	r24, r24
+ c36:	90 e0       	ldi	r25, 0x00	; 0
+ c38:	00 24       	eor	r0, r0
+ c3a:	96 95       	lsr	r25
+ c3c:	87 95       	ror	r24
+ c3e:	07 94       	ror	r0
+ c40:	96 95       	lsr	r25
+ c42:	87 95       	ror	r24
+ c44:	07 94       	ror	r0
+ c46:	98 2f       	mov	r25, r24
+ c48:	80 2d       	mov	r24, r0
+ c4a:	82 2b       	or	r24, r18
+ c4c:	8c 93       	st	X, r24
+            /*Set the Timer Clock Prescaler*/
+            TCCR1B = (TCCR1B&0xF8) | (t_configPointer->timer_clock&0x07);
+ c4e:	ae e4       	ldi	r26, 0x4E	; 78
+ c50:	b0 e0       	ldi	r27, 0x00	; 0
+ c52:	ee e4       	ldi	r30, 0x4E	; 78
+ c54:	f0 e0       	ldi	r31, 0x00	; 0
+ c56:	80 81       	ld	r24, Z
+ c58:	98 2f       	mov	r25, r24
+ c5a:	98 7f       	andi	r25, 0xF8	; 248
+ c5c:	e9 81       	ldd	r30, Y+1	; 0x01
+ c5e:	fa 81       	ldd	r31, Y+2	; 0x02
+ c60:	81 81       	ldd	r24, Z+1	; 0x01
+ c62:	87 70       	andi	r24, 0x07	; 7
+ c64:	89 2b       	or	r24, r25
+ c66:	8c 93       	st	X, r24
+            /*Enable Global Interrupt flag; Exiting Critical Section*/
+            EN_GLOBAL_INTERRUPT;        
+ c68:	af e5       	ldi	r26, 0x5F	; 95
+ c6a:	b0 e0       	ldi	r27, 0x00	; 0
+ c6c:	ef e5       	ldi	r30, 0x5F	; 95
+ c6e:	f0 e0       	ldi	r31, 0x00	; 0
+ c70:	80 81       	ld	r24, Z
+ c72:	80 68       	ori	r24, 0x80	; 128
+ c74:	8c 93       	st	X, r24
+        default:break;
+    }
+
+
+
+}
+ c76:	0f 90       	pop	r0
+ c78:	0f 90       	pop	r0
+ c7a:	0f 90       	pop	r0
+ c7c:	0f 90       	pop	r0
+ c7e:	cf 91       	pop	r28
+ c80:	df 91       	pop	r29
+ c82:	08 95       	ret
+
+00000c84 <__TIMER_CTC_stopTimer>:
+
+
+/*** Description:-
+ * Used to Disable the timer */
+void __TIMER_CTC_stopTimer(uint8 timer_module)
+{
+ c84:	df 93       	push	r29
+ c86:	cf 93       	push	r28
+ c88:	00 d0       	rcall	.+0      	; 0xc8a <__TIMER_CTC_stopTimer+0x6>
+ c8a:	0f 92       	push	r0
+ c8c:	cd b7       	in	r28, 0x3d	; 61
+ c8e:	de b7       	in	r29, 0x3e	; 62
+ c90:	89 83       	std	Y+1, r24	; 0x01
+    switch(timer_module)
+ c92:	89 81       	ldd	r24, Y+1	; 0x01
+ c94:	28 2f       	mov	r18, r24
+ c96:	30 e0       	ldi	r19, 0x00	; 0
+ c98:	3b 83       	std	Y+3, r19	; 0x03
+ c9a:	2a 83       	std	Y+2, r18	; 0x02
+ c9c:	8a 81       	ldd	r24, Y+2	; 0x02
+ c9e:	9b 81       	ldd	r25, Y+3	; 0x03
+ ca0:	00 97       	sbiw	r24, 0x00	; 0
+ ca2:	31 f0       	breq	.+12     	; 0xcb0 <__TIMER_CTC_stopTimer+0x2c>
+ ca4:	2a 81       	ldd	r18, Y+2	; 0x02
+ ca6:	3b 81       	ldd	r19, Y+3	; 0x03
+ ca8:	21 30       	cpi	r18, 0x01	; 1
+ caa:	31 05       	cpc	r19, r1
+ cac:	d1 f0       	breq	.+52     	; 0xce2 <__TIMER_CTC_stopTimer+0x5e>
+ cae:	34 c0       	rjmp	.+104    	; 0xd18 <__TIMER_CTC_stopTimer+0x94>
+    {
+        case TIMER0:
+            /*Disable Global Interrupt flag; Exiting Critical Section*/
+            DIS_GLOBAL_INTERRUPT;
+ cb0:	af e5       	ldi	r26, 0x5F	; 95
+ cb2:	b0 e0       	ldi	r27, 0x00	; 0
+ cb4:	ef e5       	ldi	r30, 0x5F	; 95
+ cb6:	f0 e0       	ldi	r31, 0x00	; 0
+ cb8:	80 81       	ld	r24, Z
+ cba:	8f 77       	andi	r24, 0x7F	; 127
+ cbc:	8c 93       	st	X, r24
+            /*Disable Timer Clock Source: will Disable the Timer itself*/
+            TCCR0 = 0x00;
+ cbe:	e3 e5       	ldi	r30, 0x53	; 83
+ cc0:	f0 e0       	ldi	r31, 0x00	; 0
+ cc2:	10 82       	st	Z, r1
+            /*for double confirming disable module interrupt flag*/
+            CLR_BIT(TIMSK, OCIE0);    //TIMSK &= ~(1<<OCIE0);
+ cc4:	a9 e5       	ldi	r26, 0x59	; 89
+ cc6:	b0 e0       	ldi	r27, 0x00	; 0
+ cc8:	e9 e5       	ldi	r30, 0x59	; 89
+ cca:	f0 e0       	ldi	r31, 0x00	; 0
+ ccc:	80 81       	ld	r24, Z
+ cce:	8d 7f       	andi	r24, 0xFD	; 253
+ cd0:	8c 93       	st	X, r24
+            /*Enable Global Interrupt flag; Exiting Critical Section*/
+            EN_GLOBAL_INTERRUPT;
+ cd2:	af e5       	ldi	r26, 0x5F	; 95
+ cd4:	b0 e0       	ldi	r27, 0x00	; 0
+ cd6:	ef e5       	ldi	r30, 0x5F	; 95
+ cd8:	f0 e0       	ldi	r31, 0x00	; 0
+ cda:	80 81       	ld	r24, Z
+ cdc:	80 68       	ori	r24, 0x80	; 128
+ cde:	8c 93       	st	X, r24
+ ce0:	1b c0       	rjmp	.+54     	; 0xd18 <__TIMER_CTC_stopTimer+0x94>
+        break;
+
+        case TIMER1:
+            /*Disable Global Interrupt flag; Entering Critical Section*/
+            DIS_GLOBAL_INTERRUPT;
+ ce2:	af e5       	ldi	r26, 0x5F	; 95
+ ce4:	b0 e0       	ldi	r27, 0x00	; 0
+ ce6:	ef e5       	ldi	r30, 0x5F	; 95
+ ce8:	f0 e0       	ldi	r31, 0x00	; 0
+ cea:	80 81       	ld	r24, Z
+ cec:	8f 77       	andi	r24, 0x7F	; 127
+ cee:	8c 93       	st	X, r24
+            /*Disable Timer Clock Source: will Disable the Timer itself*/
+            TCCR1A = 0x00;
+ cf0:	ef e4       	ldi	r30, 0x4F	; 79
+ cf2:	f0 e0       	ldi	r31, 0x00	; 0
+ cf4:	10 82       	st	Z, r1
+            TCCR1B = 0x00;
+ cf6:	ee e4       	ldi	r30, 0x4E	; 78
+ cf8:	f0 e0       	ldi	r31, 0x00	; 0
+ cfa:	10 82       	st	Z, r1
+            /*for double confirming disable module interrupt flag as well*/
+            CLR_BIT(TIMSK, OCIE1A);
+ cfc:	a9 e5       	ldi	r26, 0x59	; 89
+ cfe:	b0 e0       	ldi	r27, 0x00	; 0
+ d00:	e9 e5       	ldi	r30, 0x59	; 89
+ d02:	f0 e0       	ldi	r31, 0x00	; 0
+ d04:	80 81       	ld	r24, Z
+ d06:	8f 7e       	andi	r24, 0xEF	; 239
+ d08:	8c 93       	st	X, r24
+            /*Enable Global Interrupt flag; Exiting Critical Section*/
+            EN_GLOBAL_INTERRUPT;
+ d0a:	af e5       	ldi	r26, 0x5F	; 95
+ d0c:	b0 e0       	ldi	r27, 0x00	; 0
+ d0e:	ef e5       	ldi	r30, 0x5F	; 95
+ d10:	f0 e0       	ldi	r31, 0x00	; 0
+ d12:	80 81       	ld	r24, Z
+ d14:	80 68       	ori	r24, 0x80	; 128
+ d16:	8c 93       	st	X, r24
+        break;
+
+        case TIMER2:break;
+        default:break;
+    }
+}
+ d18:	0f 90       	pop	r0
+ d1a:	0f 90       	pop	r0
+ d1c:	0f 90       	pop	r0
+ d1e:	cf 91       	pop	r28
+ d20:	df 91       	pop	r29
+ d22:	08 95       	ret
+
+00000d24 <__udivmodqi4>:
+ d24:	99 1b       	sub	r25, r25
+ d26:	79 e0       	ldi	r23, 0x09	; 9
+ d28:	04 c0       	rjmp	.+8      	; 0xd32 <__udivmodqi4_ep>
+
+00000d2a <__udivmodqi4_loop>:
+ d2a:	99 1f       	adc	r25, r25
+ d2c:	96 17       	cp	r25, r22
+ d2e:	08 f0       	brcs	.+2      	; 0xd32 <__udivmodqi4_ep>
+ d30:	96 1b       	sub	r25, r22
+
+00000d32 <__udivmodqi4_ep>:
+ d32:	88 1f       	adc	r24, r24
+ d34:	7a 95       	dec	r23
+ d36:	c9 f7       	brne	.-14     	; 0xd2a <__udivmodqi4_loop>
+ d38:	80 95       	com	r24
+ d3a:	08 95       	ret
+
+00000d3c <_exit>:
+ d3c:	f8 94       	cli
+
+00000d3e <__stop_program>:
+ d3e:	ff cf       	rjmp	.-2      	; 0xd3e <__stop_program>

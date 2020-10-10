@@ -1,0 +1,23 @@
+/*
+ * app.c
+ *
+ *  Created on: Oct 9, 2020
+ *      Author: montasse
+ */
+
+
+#include "timer.h"
+
+
+
+
+int main(void)
+{
+	configType_TIMER timer1_configs = {};
+
+	while(1)
+	{
+
+	}
+	return 0;
+}

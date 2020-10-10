@@ -1,0 +1,141 @@
+/*
+ * app.c
+ *
+ *  Created on: Oct 9, 2020
+ *      Author: montasse
+ */
+
+/* Preprocessor Section *********************************************************************/
+#include "timer.h"
+
+#define _7SEG_DATA_PORT		PORTC
+#define _7SEG_DATA_PORT		PORTA
+#define SECONDS_1ST_DIGIT	0
+#define SECONDS_2ND_DIGIT	1
+#define MINUTES_1ST_DIGIT	2
+#define MINUTES_2ND_DIGIT	3
+#define HOURS___1ST_DIGIT	4
+#define HOURS___2ND_DIGIT	5
+/********************************************************************************************/
+
+/* Function Prototypes **********************************************************************/
+
+void DW_7SEG_screenDisplayFunction(void);
+void DW_TIMER1_ISR_callBackFunction(void);
+void DW_INT0_ISR_callBackFunction_Reset_Adjust_Buttons(void);
+void DW_INT1_ISR_callBackFunction_Start_Inc_Buttons(void);
+void DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons(void);
+/********************************************************************************************/
+
+
+/* Global Variables *************************************************************************/
+uint8 seconds=0;
+uint8 minutes=55;
+uint8 hours=33;
+/********************************************************************************************/
+
+
+/* Digital Watch Software Application *******************************************************/
+int main(void)
+{
+
+	configType_TIMER timer1_configs = {TIMER1, TIMER_F_CPU_64, 8000, OCx_DISABLED};
+
+
+	DDRC = 0b00111111;
+	PORTC = 0x00;
+
+	DDRA = 0b00001111;
+	PORTA = 0x00;
+
+	__TIMER_CTC_setISRCallBackFuncPointer(TIMER1, DW_TIMER1_ISR_callBackFunction);
+
+	__TIMER_CTC_startTimer(&timer1_configs);
+
+	while(1)
+	{
+//		_7seg_display[0] = seconds%10;
+//		_7seg_display[1] = (seconds/10)%10;
+//		_7seg_display[2] = minutes%10;
+//		_7seg_display[3] = (minutes/10)%10;
+//		_7seg_display[4] = hours%10;
+//		_7seg_display[5] = (hours/10)%10;
+//
+//		for(i=0 ; i<=6 ; i++)
+//		{
+//			PORTC = (1<<i);
+//			PORTA = _7seg_display[i];
+//			MILLI_DELAY;MILLI_DELAY;
+//		}
+
+		DW_7SEG_screenDisplayFunction();
+
+
+
+	}
+	return 0;
+}
+
+/******************************************************************/
+void DW_7SEG_screenDisplayFunction(void)
+{
+	static uint8 _7seg_display[6];
+	static uint8 disp_selector;
+
+	/* Adjust the Clock Correct Values to Displayed */
+	_7seg_display[SECONDS_1ST_DIGIT] = seconds%10;
+	_7seg_display[SECONDS_2ND_DIGIT] = (seconds/10)%10;
+	_7seg_display[MINUTES_1ST_DIGIT] = minutes%10;
+	_7seg_display[MINUTES_2ND_DIGIT] = (minutes/10)%10;
+	_7seg_display[HOURS___1ST_DIGIT] = hours%10;
+	_7seg_display[HOURS___2ND_DIGIT] = (hours/10)%10;
+
+
+	/* Loop over the [6] 7 Segements to Display Each number */
+	for(disp_selector=0 ; disp_selector<=6 ; disp_selector++)
+	{
+		/*Enable the desired 7 Segment Display*/
+		_7SEG_CTRL_PORT = (1<<disp_selector);
+		/*Output the desired value in Display*/
+		_7SEG_DATA_PORT = _7seg_display[disp_selector];
+		/*Delay in uSeconds*/
+		MILLI_DELAY;MILLI_DELAY;
+	}
+
+}
+
+/******************************************************************/
+void DW_TIMER1_ISR_callBackFunction(void)
+{
+	seconds++;
+
+	if(seconds == 60)
+	{
+		seconds = 0;
+		minutes++;
+	}
+	if(minutes == 60)
+	{
+		minutes = 0;
+		hours++;
+	}
+}
+
+/******************************************************************/
+void DW_INT0_ISR_callBackFunction_Reset_Adjust_Buttons(void)
+{
+
+}
+
+/******************************************************************/
+void DW_INT1_ISR_callBackFunction_Start_Inc_Buttons(void)
+{
+
+}
+
+/******************************************************************/
+void DW_INT2_ISR_callBackFunction_Stop_Dec_Buttons(void)
+{
+
+}
+/********************************************************************************************/

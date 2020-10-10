@@ -1,0 +1,34 @@
+/*
+ * app.c
+ *
+ *  Created on: Oct 9, 2020
+ *      Author: montasse
+ */
+
+
+#include "timer.h"
+
+
+
+
+int main(void)
+{
+	configType_TIMER timer1_configs = {TIMER1, TIMER_F_CPU_64, 8000, OCx_DISABLED};
+
+	DDRD |= (1<<PD0);
+
+	__TIMER_CTC_setISRCallBackFuncPointer(DW_TIMER1_ISR_callBackFunction);
+	__TIMER_CTC_startTimer(&timer1_configs);
+
+	while(1)
+	{
+
+	}
+	return 0;
+}
+
+
+void DW_TIMER1_ISR_callBackFunction(void)
+{
+
+}

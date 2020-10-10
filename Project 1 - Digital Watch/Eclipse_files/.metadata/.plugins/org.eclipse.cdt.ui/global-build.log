@@ -1,0 +1,31 @@
+13:58:18 **** Incremental Build of configuration Debug for project DigitalWatch ****
+make all 
+Building file: ../app.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"app.d" -MT"app.o" -c -o "app.o" "../app.c"
+Finished building: ../app.c
+ 
+Building target: DigitalWatch.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,DigitalWatch.map -mmcu=atmega16 -o "DigitalWatch.elf"  ./app.o ./external_interrupt.o ./timer.o   
+Finished building target: DigitalWatch.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S DigitalWatch.elf  >"DigitalWatch.lss"
+Finished building: DigitalWatch.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega16 DigitalWatch.elf
+AVR Memory Usage
+----------------
+Device: atmega16
+
+Program:    3404 bytes (20.8% Full)
+(.text + .data + .bootloader)
+
+Data:         38 bytes (3.7% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
