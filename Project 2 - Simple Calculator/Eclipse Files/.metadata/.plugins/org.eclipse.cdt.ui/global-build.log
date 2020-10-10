@@ -1,0 +1,31 @@
+05:58:45 **** Incremental Build of configuration Debug for project Calculator ****
+make all 
+Building file: ../appl.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"appl.d" -MT"appl.o" -c -o "appl.o" "../appl.c"
+Finished building: ../appl.c
+ 
+Building target: Calculator.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,Calculator.map -mmcu=atmega16 -o "Calculator.elf"  ./DIO.o ./LCD.o ./appl.o ./keypad.o   
+Finished building target: Calculator.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S Calculator.elf  >"Calculator.lss"
+Finished building: Calculator.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega16 Calculator.elf
+AVR Memory Usage
+----------------
+Device: atmega16
+
+Program:    3180 bytes (19.4% Full)
+(.text + .data + .bootloader)
+
+Data:         42 bytes (4.1% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

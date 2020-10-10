@@ -1,0 +1,42 @@
+/*****************************************************************************
+ * macros.h
+ *  ** Common - Bit-wise Operations Macros **
+ *     ----------------------------------- 
+ *    File contains the commonly used bit-wise operations macros.
+ *    Designed for AVR ATmega16 Microcontroller,
+ *    (8-bits Binaries)..
+ *
+ *  Created on: Sep 6, 2020
+ *      Author: Ahmed Montasser
+ *****************************************************************************/
+
+#ifndef MACROS_H_
+#define MACROS_H_
+
+unsigned int cycles;
+
+/* Delay Specific time */
+#define APPROX_1SEC_DELAY for(cycles=0 ; cycles<65000 ; cycles++)
+#define APPROX_HALF_SEC_DELAY for(cycles=0 ; cycles<35000 ; cycles++)
+#define APPROX_QUAR_SEC_DELAY for(cycles=0 ; cycles<20000 ; cycles++)
+#define MILLI_DELAY for(cycles=0 ; cycles<10 ; cycles++)
+
+/* Set a certain bit in any register */
+#define SET_BIT(binary,bit) (binary |= (1<<bit))
+
+/* Clear a certain bit in any register */
+#define CLR_BIT(binary,bit) (binary &= (~(1<<bit)))
+
+/* Toggle a certain bit in any register */
+#define TGL_BIT(binary,bit) (binary ^= (1<<bit))
+
+/* Check Value of a specific bit in any register*/
+#define READ_BIT(binary,bit) ((binary & (1<<bit))>>bit)
+
+/* Enable Global Interrupt */
+#define EN_GLOBAL_INTERRUPT SREG |= (1<<I_BIT)
+
+/* Disable Global Interrupt */
+#define DIS_GLOBAL_INTERRUPT SREG &= ~(1<<I_BIT)
+
+#endif /* MACROS_H_ */

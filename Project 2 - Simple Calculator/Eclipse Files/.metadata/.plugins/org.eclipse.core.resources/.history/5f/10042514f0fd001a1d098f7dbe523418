@@ -1,0 +1,42 @@
+/*
+ * appl.c
+ * 	Simple Calculator Application Software
+ * 		- LCD Connected over:
+ * 			> Data Bus : PORTD
+ * 			> RS:PC5	- RW:PC6	-EN:PC7
+ * 		- 4x4 Keypad connected over PORTA
+ *
+ *  Created on: Sep 24, 2020
+ *      Author: montasse
+ */
+
+#include "keypad.h"
+#include "LCD.h"
+
+
+int main(void)
+{
+	uint8 pressed_key;
+	uint8 num1, num2, operator, counter;
+
+	_LCD_init();
+
+	while(TRUE)
+	{
+		pressed_key = _KEYPAD_getCurrentPressedKey();
+
+		if( pressed_key<=9 && pressed_key>=0 )
+		{
+			_LCD_displayIntegerVariable(pressed_key);
+		}
+		else
+		{
+			_LCD_displayCharacter(pressed_key);
+		}
+
+		APPROX_QUAR_SEC_DELAY;
+	}
+	return 0;
+}
+
+
