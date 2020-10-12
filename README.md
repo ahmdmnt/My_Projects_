@@ -1,2 +1,2 @@
-# My_Projects_
-The Available Projects is designed using ATmega16 microcontroller.
+# myWorkspace
+The available softwares are all designed from a to z, no libraries are used.
