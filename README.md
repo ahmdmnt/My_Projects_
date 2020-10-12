@@ -1,2 +1,2 @@
 # myWorkspace
-The available softwares are all designed from a to z, no libraries are used.
+The available software are all designed from A to Z, no libraries are used.
