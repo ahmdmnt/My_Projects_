@@ -1,0 +1,5 @@
+02:21:19 **** Incremental Build of configuration Debug for project myDataStructures_Library ****
+Info: Internal Builder is used for build
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -o queue.o "..\\queue.c" 
+gcc -o myDataStructures_Library.exe main.o queue.o single_linked_list.o stack.o 
+Info: Nothing to build for myDataStructures_Library
